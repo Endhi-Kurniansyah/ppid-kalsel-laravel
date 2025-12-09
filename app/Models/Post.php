@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $fillable = ['title', 'slug', 'content', 'image', 'views', 'user_id', 'category_id'];
+    protected $fillable = [
+        'title',
+        'slug',
+        'content',
+        'image',
+        'views',
+        'user_id',
+        'category_id'
+    ];
 
     // Relasi: Berita dimiliki oleh satu User (Penulis)
     public function user()

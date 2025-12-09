@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('information_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('ticket_number')->unique(); // No Tiket unik
-            $table->text('information_needed'); // Rincian Informasi yang dibutuhkan
-            $table->text('reason'); // Tujuan penggunaan informasi
-            $table->enum('status', ['pending', 'process', 'accepted', 'rejected'])->default('pending');
-            $table->date('finished_date')->nullable();
-            // Relasi ke Tabel Applicants (Pemohon)
+            $table->string('ticket_number')->unique();
+            $table->text('details'); // <--- PASTIKAN INI 'details', BUKAN 'information_needed'
+            $table->text('purpose');
+            $table->enum('status', ['pending', 'processed', 'accepted', 'rejected'])->default('pending');
             $table->foreignId('applicant_id')->constrained('applicants')->onDelete('cascade');
             $table->timestamps();
         });

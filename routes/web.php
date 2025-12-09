@@ -19,13 +19,26 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('admin.dashboard'); // Arahkan ke folder admin/dashboard
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/requests/print', [App\Http\Controllers\InformationRequestController::class, 'print'])->name('requests.print');
+    Route::resource('requests', \App\Http\Controllers\InformationRequestController::class);
+    Route::get('/surveys/print', [App\Http\Controllers\SurveyController::class, 'print'])->name('surveys.print');
+    Route::get('/surveys', [App\Http\Controllers\SurveyController::class, 'index'])->name('surveys.index');
+    Route::get('/documents/print', [App\Http\Controllers\DocumentController::class, 'print'])->name('documents.print');
+    Route::resource('documents', App\Http\Controllers\DocumentController::class);
+    Route::resource('pages', \App\Http\Controllers\PageController::class);
 });
+// Rute Publik (Bisa diakses siapa saja)
+Route::get('/ajukan-permohonan', [App\Http\Controllers\PublicController::class, 'showForm'])->name('public.form');
+Route::post('/ajukan-permohonan', [App\Http\Controllers\PublicController::class, 'submitRequest'])->name('public.submit');
+Route::post('/survey', [App\Http\Controllers\SurveyController::class, 'store'])->name('survey.store');
+Route::get('/informasi/{slug}', [App\Http\Controllers\PublicController::class, 'showDocuments'])->name('public.documents');
+Route::get('/page/{slug}', [App\Http\Controllers\PublicController::class, 'showPage'])->name('public.page');
 
 require __DIR__.'/auth.php';

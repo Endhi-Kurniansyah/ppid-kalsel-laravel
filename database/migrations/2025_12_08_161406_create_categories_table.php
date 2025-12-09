@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Nama Kategori (Misal: Berkala, Serta Merta, Berita Kegiatan)
+            $table->string('name');
             $table->string('slug')->unique();
-            $table->enum('type', ['news', 'document']); // Pembeda kategori berita atau dokumen
+            $table->enum('type', ['news', 'document']); // Pembeda: Kategori Berita atau Dokumen
             $table->timestamps();
         });
     }

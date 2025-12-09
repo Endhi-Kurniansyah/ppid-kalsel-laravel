@@ -1,0 +1,40 @@
+/* public/css/landing.css */
+
+/* Navbar Transparan & Modern */
+.navbar-custom {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 15px 0;
+}
+
+.nav-link {
+    font-weight: 600;
+    color: #25396f !important;
+    margin-left: 20px;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #435ebe !important;
+}
+
+/* Hero Section dengan Gambar Latar */
+.hero-section {
+    /* Ganti URL gambar di sini jika ingin mengubah background */
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://kalselprov.go.id/gallery/100021670984180.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 85vh; /* Tinggi layar 85% */
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+/* Efek Hover pada Kartu Layanan */
+.hover-zoom {
+    transition: transform 0.3s ease;
+}
+
+.hover-zoom:hover {
+    transform: translateY(-10px); /* Naik sedikit saat disentuh */
+}
