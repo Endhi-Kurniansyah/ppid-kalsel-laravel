@@ -32,11 +32,35 @@
                         <a class="nav-link dropdown-toggle" href="#" id="profilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Profil
                         </a>
+
                         <ul class="dropdown-menu border-0 shadow" aria-labelledby="profilDropdown">
+
                             <li><a class="dropdown-item" href="{{ url('/page/tentang-ppid') }}">Tentang PPID</a></li>
                             <li><a class="dropdown-item" href="{{ url('/page/visi-misi') }}">Visi & Misi</a></li>
                             <li><a class="dropdown-item" href="{{ url('/page/struktur-organisasi') }}">Struktur Organisasi</a></li>
                             <li><a class="dropdown-item" href="{{ url('/page/tugas-fungsi') }}">Tugas & Fungsi</a></li>
+
+                            @php
+                                // KITA FILTER AGAR HALAMAN UTAMA TIDAK MUNCUL DUA KALI
+                                $slugWajib = ['tentang-ppid', 'visi-misi', 'struktur-organisasi', 'tugas-fungsi'];
+
+                                $halamanBaru = \App\Models\Page::where('is_static', 0)
+                                    ->whereNotIn('slug', $slugWajib) // Perintah: Jangan ambil kalau slug-nya ada di daftar wajib
+                                    ->latest()
+                                    ->get();
+                            @endphp
+
+                            @if($halamanBaru->count() > 0)
+
+                                @foreach($halamanBaru as $page)
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('public.page', $page->slug) }}">
+                                            {{ $page->title }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @endif
+
                         </ul>
                     </li>
 

@@ -14,7 +14,7 @@ class Post extends Model
         'image',
         'views',
         'user_id',
-        'category_id'
+        'category_id',
     ];
 
     // Relasi: Berita dimiliki oleh satu User (Penulis)

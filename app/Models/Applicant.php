@@ -15,7 +15,7 @@ class Applicant extends Model
         'address',
         'job',
         'type',
-        'ktp_file_path'
+        'ktp_file_path',
     ];
 
     // Relasi: Pemohon bisa punya banyak Request

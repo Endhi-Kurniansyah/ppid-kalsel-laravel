@@ -10,6 +10,6 @@ class Survey extends Model
     protected $fillable = [
         'rating',
         'comment',
-        'ip_address'
+        'ip_address',
     ];
 }

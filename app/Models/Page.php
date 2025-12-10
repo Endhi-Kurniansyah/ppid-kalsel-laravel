@@ -12,9 +12,5 @@ class Page extends Model
     // HANYA INI SAJA ISINYA.
     // JANGAN tulis: protected $content; (HAPUS BARIS INI)
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'content'
-    ];
+    protected $fillable = ['title', 'slug', 'content', 'is_static'];
 }

@@ -13,7 +13,7 @@ class Document extends Model
         'file_path',
         'published_date',
         'user_id',
-        'category_id'
+        'category_id',
     ];
 
     public function user()

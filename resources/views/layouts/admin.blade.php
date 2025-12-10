@@ -39,6 +39,24 @@
                             </a>
                         </li>
 
+                        <li class="sidebar-title">Konten Utama</li>
+
+                        <li class="sidebar-item {{ Request::is('pages*') ? 'active' : '' }}">
+                            <a href="{{ route('pages.index') }}" class='sidebar-link'>
+                                <i class="bi bi-journal-text"></i>
+                                <span>Manajemen Halaman</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-title">Dokumen & file</li>
+
+                        <li class="sidebar-item {{ Request::is('documents*') ? 'active' : '' }}">
+                            <a href="{{ route('documents.index') }}" class='sidebar-link'>
+                                <i class="bi bi-folder-fill"></i>
+                                <span>Inventaris Dokumen</span>
+                            </a>
+                        </li>
+
                         <li class="sidebar-title">Laporan Magang</li>
 
                         <li class="sidebar-item {{ Request::is('requests*') ? 'active' : '' }}">
@@ -51,18 +69,6 @@
                             <a href="{{ route('surveys.index') }}" class='sidebar-link'>
                                 <i class="bi bi-bar-chart-fill"></i>
                                 <span>Laporan Survei (IKM)</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item {{ Request::is('documents*') ? 'active' : '' }}">
-                            <a href="{{ route('documents.index') }}" class='sidebar-link'>
-                                <i class="bi bi-folder-fill"></i>
-                                <span>Inventaris Dokumen</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item {{ Request::is('pages*') ? 'active' : '' }}">
-                            <a href="{{ route('pages.index') }}" class='sidebar-link'>
-                                <i class="bi bi-journal-text"></i>
-                                <span>Manajemen Halaman</span>
                             </a>
                         </li>
 
