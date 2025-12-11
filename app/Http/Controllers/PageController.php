@@ -68,7 +68,21 @@ class PageController extends Controller
     // Hapus
     public function destroy(Page $page)
     {
+        // 1. CEK APAKAH HALAMAN INI TERKUNCI?
+        if ($page->is_static == 1) {
+
+            // 2. JIKA TERKUNCI, CEK APAKAH YANG MENGHAPUS ITU SUPER ADMIN?
+            if (auth()->user()->role !== 'super_admin') {
+                // Kalau bukan Super Admin, TENDANG KELUAR!
+                abort(403, 'ANDA TIDAK MEMILIKI AKSES! Halaman ini dilindungi.');
+            }
+
+            // Kalau Super Admin, boleh lanjut hapus (Force Delete)
+        }
+
+        // Proses Hapus
         $page->delete();
-        return redirect()->route('pages.index')->with('success', 'Halaman dihapus.');
+
+        return redirect()->route('pages.index')->with('success', 'Halaman berhasil dihapus.');
     }
 }

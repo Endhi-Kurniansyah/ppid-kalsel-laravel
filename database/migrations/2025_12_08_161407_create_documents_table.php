@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->string('title'); // Judul Dokumen (Misal: SK Gubernur No 1)
-            $table->string('file_path'); // Lokasi file PDF/Doc
-            $table->date('published_date'); // Tanggal dokumen diterbitkan
-            // Relasi ke User (Uploader) dan Category
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->foreignId('category_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->date('published_date')->nullable();
+            $table->string('file_path');
             $table->timestamps();
         });
     }

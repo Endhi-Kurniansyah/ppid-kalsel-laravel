@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // Ambil 3 berita terbaru yang statusnya 'published'
+    // with('user') gunanya biar kita bisa menampilkan nama penulisnya
+    $posts = Post::with('user', 'category')->latest()->take(3)->get();
+
+    return view('welcome', compact('posts'));
 });
 
 Route::get('/dashboard', function () {
@@ -33,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/documents/print', [App\Http\Controllers\DocumentController::class, 'print'])->name('documents.print');
     Route::resource('documents', App\Http\Controllers\DocumentController::class);
     Route::resource('pages', \App\Http\Controllers\PageController::class);
+    // 5. Rute Berita / Artikel
+    Route::resource('posts', \App\Http\Controllers\PostController::class);
 });
 // Rute Publik (Bisa diakses siapa saja)
 Route::get('/ajukan-permohonan', [App\Http\Controllers\PublicController::class, 'showForm'])->name('public.form');

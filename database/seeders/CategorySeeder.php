@@ -16,6 +16,9 @@ class CategorySeeder extends Seeder
             ['name' => 'Informasi Setiap Saat', 'slug' => 'setiap-saat', 'type' => 'document'],
             ['name' => 'Informasi Dikecualikan', 'slug' => 'dikecualikan', 'type' => 'document'],
             ['name' => 'SOP Layanan', 'slug' => 'sop', 'type' => 'document'],
+            ['name' => 'Berita Kegiatan', 'slug' => 'berita-kegiatan', 'type' => 'news'],
+            ['name' => 'Artikel', 'slug' => 'artikel', 'type' => 'news'],
+            ['name' => 'Pengumuman', 'slug' => 'pengumuman', 'type' => 'news'],
         ];
 
         // Loop Simpan

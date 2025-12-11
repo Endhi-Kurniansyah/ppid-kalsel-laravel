@@ -68,25 +68,62 @@
     </div>
 </section>
 
-<section class="py-5">
+<section id="berita" class="py-5 bg-light">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold">Berita & Kegiatan</h3>
-            <a href="#" class="btn btn-outline-primary rounded-pill">Lihat Semua</a>
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-primary">Berita & Artikel Terbaru</h2>
+            <p class="text-muted">Ikuti kegiatan dan informasi terkini dari PPID Kalsel</p>
         </div>
 
         <div class="row">
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm">
-                    <img src="https://kalselprov.go.id/gallery/100021670984180.jpg" class="card-img-top" alt="Berita 1" style="height: 200px; object-fit: cover;">
+            @forelse($posts as $post)
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0 hover-card">
+
+                    <div class="position-relative">
+                        @if($post->image)
+                            <img src="{{ asset('storage/' . $post->image) }}" class="card-img-top" alt="{{ $post->title }}" style="height: 200px; object-fit: cover;">
+                        @else
+                            <img src="https://via.placeholder.com/400x200?text=No+Image" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        @endif
+
+                        <span class="badge bg-primary position-absolute top-0 start-0 m-3 shadow">
+                            {{ $post->category->name ?? 'Berita' }}
+                        </span>
+                    </div>
+
                     <div class="card-body">
-                        <small class="text-muted">10 Desember 2025</small>
-                        <h5 class="card-title mt-2">Kunjungan Gubernur Kalsel</h5>
-                        <p class="card-text text-muted">Gubernur meninjau lokasi pembangunan jembatan...</p>
-                        <a href="#" class="text-decoration-none fw-bold">Baca Selengkapnya &rarr;</a>
+                        <small class="text-muted d-block mb-2">
+                            <i class="bi bi-calendar-event me-1"></i> {{ $post->created_at->format('d M Y') }}
+                            &nbsp;|&nbsp;
+                            <i class="bi bi-person me-1"></i> {{ $post->user->name }}
+                        </small>
+
+                        <h5 class="card-title fw-bold">
+                            <a href="#" class="text-decoration-none text-dark stretched-link">
+                                {{ Str::limit($post->title, 50) }}
+                            </a>
+                        </h5>
+
+                        <p class="card-text text-muted small">
+                            {{ Str::limit(strip_tags($post->content), 100) }}
+                        </p>
                     </div>
                 </div>
             </div>
+            @empty
+            <div class="col-12 text-center py-5">
+                <div class="alert alert-info border-0 shadow-sm d-inline-block px-5">
+                    <i class="bi bi-info-circle me-2"></i> Belum ada berita yang diterbitkan.
+                </div>
+            </div>
+            @endforelse
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="#" class="btn btn-outline-primary px-4 rounded-pill">
+                Lihat Semua Berita <i class="bi bi-arrow-right ms-2"></i>
+            </a>
         </div>
     </div>
 </section>

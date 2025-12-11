@@ -1,0 +1,41 @@
+/* public/assets/custom/admin-style.css */
+
+/* Sembunyikan upload file Summernote (biar simpel) */
+.note-group-select-from-files {
+    display: none;
+}
+
+/* TAMPILAN HEADER RAPI (Mirip Referensi) */
+.header-top {
+    background-color: #ffffff; /* Putih Bersih */
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.03); /* Bayangan Halus */
+    padding: 1.2rem 2rem; /* Jarak lega */
+    border-radius: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+/* Mode Gelap (Dark Mode Support) */
+html[data-bs-theme="dark"] .header-top {
+    background-color: #1e1e2d;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Rapikan Teks Nama User */
+.user-name h6 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 0;
+    color: #444;
+}
+
+/* Rapikan Badge Role */
+.user-role-badge {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    display: inline-block;
+}
