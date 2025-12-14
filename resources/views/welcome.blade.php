@@ -27,7 +27,7 @@
             </div>
 
             <div class="col-md-3 mb-4">
-                <a href="{{ route('public.form') }}" class="text-decoration-none text-dark">
+                <a href="{{ route('requests.create') }}" class="text-decoration-none text-dark">
                     <div class="card border-0 shadow-sm h-100 py-4 hover-zoom">
                         <div class="card-body">
                             <div class="mb-3 text-success">
@@ -100,7 +100,7 @@
                         </small>
 
                         <h5 class="card-title fw-bold">
-                            <a href="#" class="text-decoration-none text-dark stretched-link">
+                            <a href="{{ route('news.show', $post->slug) }}" class="text-decoration-none text-dark stretched-link"></a>
                                 {{ Str::limit($post->title, 50) }}
                             </a>
                         </h5>

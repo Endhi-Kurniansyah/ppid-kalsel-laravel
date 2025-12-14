@@ -7,11 +7,47 @@ use Illuminate\Database\Eloquent\Model;
 
 class InformationRequest extends Model
 {
-    protected $fillable = ['ticket_number', 'details', 'purpose', 'status', 'applicant_id'];
+    use HasFactory;
 
-    // Relasi: Request milik satu Applicant
-    public function applicant()
+    // Kita masukkan SEMUA kolom agar bisa diisi (Mass Assignment)
+    protected $fillable = [
+        // Data Diri
+        'name',
+        'nik',
+        'ktp_file',
+        'email',
+        'phone',
+        'address',
+        'job',
+
+        // Data Request
+        'ticket_number',
+        'details',
+        'purpose',
+        'get_method',
+        'delivery_method',
+
+        // Admin
+        'status',
+        'admin_note',
+        'reply_file',
+    ];
+
+    // HAPUS function applicant() karena kita tidak pakai tabel applicant terpisah lagi.
+
+    // Opsional: Helper untuk warna status badge di Admin Panel nanti
+    public function getStatusBadgeAttribute()
     {
-        return $this->belongsTo(Applicant::class);
+        return match ($this->status) {
+            'pending' => 'bg-warning text-dark', // Kuning (Menunggu)
+            'processed' => 'bg-info text-dark',  // Biru Muda (Diproses)
+            'finished' => 'bg-success',          // Hijau (Selesai)
+            'rejected' => 'bg-danger',           // Merah (Ditolak)
+            default => 'bg-secondary',
+        };
+    }
+    public function objection()
+    {
+        return $this->hasOne(Objection::class);
     }
 }

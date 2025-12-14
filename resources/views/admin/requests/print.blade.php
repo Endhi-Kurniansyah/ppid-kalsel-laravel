@@ -1,69 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
     <title>Laporan Permohonan Informasi</title>
     <style>
-        body { font-family: sans-serif; }
-        /* Kop Surat */
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid black; padding-bottom: 10px; }
-        .header h2, .header h3, .header p { margin: 0; }
-
-        /* Tabel */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+        body { font-family: sans-serif; font-size: 12px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h2 { margin: 0; }
+        .header p { margin: 5px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         table, th, td { border: 1px solid black; }
         th, td { padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
-
-        /* Tanda Tangan */
-        .footer { margin-top: 50px; text-align: right; }
+        .badge { font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h3>PEMERINTAH PROVINSI KALIMANTAN SELATAN</h3>
-        <h2>DINAS KOMUNIKASI DAN INFORMATIKA</h2>
-        <p>Jl. Dharma Praja No. 1, Kawasan Perkantoran Pemerintah Provinsi Kalimantan Selatan</p>
-        <p>Banjarbaru - Kalimantan Selatan</p>
+        <h2>LAPORAN PERMOHONAN INFORMASI PUBLIK</h2>
+        <p>PPID PROVINSI KALIMANTAN SELATAN</p>
+        <p><i>Dicetak pada: {{ date('d F Y') }}</i></p>
     </div>
-
-    <center>
-        <h4>LAPORAN REKAPITULASI PERMOHONAN INFORMASI PUBLIK</h4>
-        <p>Periode: {{ date('Y') }}</p>
-    </center>
 
     <table>
         <thead>
             <tr>
                 <th width="5%">No</th>
-                <th width="15%">No Tiket</th>
+                <th width="15%">No. Tiket</th>
+                <th width="15%">Tgl Masuk</th>
                 <th width="20%">Nama Pemohon</th>
-                <th width="30%">Informasi yang Diminta</th>
-                <th width="15%">Tujuan</th>
+                <th width="30%">Rincian Informasi</th>
                 <th width="15%">Status</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($requests as $index => $req)
+            @forelse($requests as $key => $req)
             <tr>
-                <td>{{ $index + 1 }}</td>
+                <td>{{ $key + 1 }}</td>
                 <td>{{ $req->ticket_number }}</td>
-                <td>{{ $req->applicant->name }}</td>
-                <td>{{ $req->details }}</td>
-                <td>{{ $req->purpose }}</td>
-                <td>{{ ucfirst($req->status) }}</td>
+                <td>{{ $req->created_at->format('d/m/Y') }}</td>
+                <td>
+                    {{ $req->name }}<br>
+                    <small>NIK: {{ $req->nik }}</small>
+                </td>
+                <td>{{ Str::limit($req->details, 100) }}</td>
+                <td>
+                    @if($req->status == 'pending') MENUNGGU
+                    @elseif($req->status == 'processed') DIPROSES
+                    @elseif($req->status == 'finished') SELESAI
+                    @elseif($req->status == 'rejected') DITOLAK
+                    @endif
+                </td>
             </tr>
-            @endforeach
+            @empty
+            <tr>
+                <td colspan="6" style="text-align: center;">Tidak ada data permohonan.</td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
-
-    <div class="footer">
-        <p>Banjarbaru, {{ date('d F Y') }}</p>
-        <p>Pejabat Pengelola Informasi dan Dokumentasi,</p>
-        <br><br><br>
-        <p><strong>(Nama Pejabat Disini)</strong></p>
-        <p>NIP. 1982xxxx xxxx xxxx</p>
-    </div>
 
 </body>
 </html>

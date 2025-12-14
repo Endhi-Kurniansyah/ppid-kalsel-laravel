@@ -9,8 +9,21 @@
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/iconly.css') }}">
-
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}">
+
+    <style>
+        .navbar-custom {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .nav-link {
+            font-weight: 500;
+            color: #25396f;
+        }
+        .nav-link:hover {
+            color: #435ebe;
+        }
+    </style>
 </head>
 
 <body>
@@ -28,30 +41,29 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/') }}">Beranda</a>
+                    </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="profilDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Profil
                         </a>
-
                         <ul class="dropdown-menu border-0 shadow" aria-labelledby="profilDropdown">
-
                             <li><a class="dropdown-item" href="{{ url('/page/tentang-ppid') }}">Tentang PPID</a></li>
                             <li><a class="dropdown-item" href="{{ url('/page/visi-misi') }}">Visi & Misi</a></li>
                             <li><a class="dropdown-item" href="{{ url('/page/struktur-organisasi') }}">Struktur Organisasi</a></li>
                             <li><a class="dropdown-item" href="{{ url('/page/tugas-fungsi') }}">Tugas & Fungsi</a></li>
 
                             @php
-                                // KITA FILTER AGAR HALAMAN UTAMA TIDAK MUNCUL DUA KALI
                                 $slugWajib = ['tentang-ppid', 'visi-misi', 'struktur-organisasi', 'tugas-fungsi'];
-
                                 $halamanBaru = \App\Models\Page::where('is_static', 0)
-                                    ->whereNotIn('slug', $slugWajib) // Perintah: Jangan ambil kalau slug-nya ada di daftar wajib
-                                    ->latest()
-                                    ->get();
+                                    ->whereNotIn('slug', $slugWajib)
+                                    ->latest()->get();
                             @endphp
 
                             @if($halamanBaru->count() > 0)
-
+                                <li><hr class="dropdown-divider"></li>
                                 @foreach($halamanBaru as $page)
                                     <li>
                                         <a class="dropdown-item" href="{{ route('public.page', $page->slug) }}">
@@ -60,7 +72,6 @@
                                     </li>
                                 @endforeach
                             @endif
-
                         </ul>
                     </li>
 
@@ -77,9 +88,22 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item"><a class="nav-link" href="#">Berita</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="serviceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Layanan
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow" aria-labelledby="serviceDropdown">
+                            <li><a class="dropdown-item" href="{{ route('requests.create') }}">Ajukan Permohonan</a></li>
+                            <li><a class="dropdown-item" href="{{ route('requests.track') }}">Cek Status Permohonan</a></li>
 
-                    <li class="nav-item"><a class="nav-link" href="#">Kontak</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="{{ route('objection.search') }}">Ajukan Keberatan</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('news.index') }}">Berita</a>
+                    </li>
 
                 </ul>
             </div>
@@ -94,17 +118,24 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <h5>PPID Kalsel</h5>
-                    <p>Layanan Informasi Publik Provinsi Kalimantan Selatan.</p>
+                    <h5 class="fw-bold text-primary">PPID Kalsel</h5>
+                    <p class="text-secondary">Layanan Informasi Publik Provinsi Kalimantan Selatan untuk mewujudkan keterbukaan informasi.</p>
                 </div>
                 <div class="col-md-4">
-                    <h5>Alamat</h5>
-                    <p>Jl. Dharma Praja No. 1, Banjarbaru<br>Provinsi Kalimantan Selatan</p>
+                    <h5 class="fw-bold">Alamat Kantor</h5>
+                    <p class="text-secondary">Jl. Dharma Praja No. 1, Banjarbaru<br>Provinsi Kalimantan Selatan</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold">Kontak Kami</h5>
+                    <p class="text-secondary">
+                        <i class="bi bi-envelope me-2"></i> ppid@kalselprov.go.id<br>
+                        <i class="bi bi-telephone me-2"></i> (0511) 477XXXX
+                    </p>
                 </div>
             </div>
-            <hr>
+            <hr class="border-secondary">
             <div class="text-center">
-                <small>&copy; 2025 Dinas Komunikasi dan Informatika Prov. Kalsel</small>
+                <small class="text-secondary">&copy; 2025 Dinas Komunikasi dan Informatika Prov. Kalsel</small>
             </div>
         </div>
     </footer>

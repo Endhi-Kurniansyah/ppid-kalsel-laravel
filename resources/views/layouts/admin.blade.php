@@ -55,10 +55,16 @@
                                 <span>Inventaris Dokumen</span>
                             </a>
                         </li>
-                        <li class="sidebar-item {{ Request::is('requests*') ? 'active' : '' }}">
-                            <a href="{{ route('requests.index') }}" class='sidebar-link'>
+                        <li class="sidebar-item {{ Request::routeIs('admin.requests.index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.requests.index') }}" class='sidebar-link'>
                                 <i class="bi bi-inbox-fill"></i>
-                                <span>Permohonan Info</span>
+                                <span>Permohonan Masuk</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item {{ Request::routeIs('admin.objections.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.objections.index') }}" class='sidebar-link'>
+                                <i class="bi bi-exclamation-triangle"></i>
+                                <span>Pengajuan Keberatan</span>
                             </a>
                         </li>
                         <li class="sidebar-item {{ Request::is('surveys*') ? 'active' : '' }}">

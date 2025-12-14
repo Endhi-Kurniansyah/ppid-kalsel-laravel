@@ -13,15 +13,31 @@ return new class extends Migration
     {
         Schema::create('information_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('ticket_number')->unique();
-            $table->text('details'); // <--- PASTIKAN INI 'details', BUKAN 'information_needed'
-            $table->text('purpose');
-            $table->enum('status', ['pending', 'processed', 'accepted', 'rejected'])->default('pending');
-            $table->foreignId('applicant_id')->constrained('applicants')->onDelete('cascade');
+
+            // --- BAGIAN 1: DATA DIRI (Pindahan dari tabel Applicants) ---
+            $table->string('name');             // Nama Pemohon
+            $table->string('nik');              // NIK KTP
+            $table->string('ktp_file')->nullable(); // Foto KTP
+            $table->string('email');
+            $table->string('phone');
+            $table->text('address');
+            $table->string('job')->nullable();  // Pekerjaan
+
+            // --- BAGIAN 2: DATA PERMINTAAN ---
+            $table->string('ticket_number')->unique(); // Kode Tiket (REQ-001)
+            $table->text('details');            // Rincian Info
+            $table->text('purpose');            // Tujuan Penggunaan
+            $table->string('get_method')->default('softcopy');      // Softcopy/Hardcopy
+            $table->string('delivery_method')->default('email');    // Email/Langsung
+
+            // --- BAGIAN 3: STATUS & ADMIN ---
+            $table->string('status')->default('pending'); // pending, processed, finished, rejected
+            $table->text('admin_note')->nullable();       // Jawaban Admin
+            $table->string('reply_file')->nullable();     // File Jawaban
+
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

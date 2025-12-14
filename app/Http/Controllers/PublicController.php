@@ -8,11 +8,21 @@ use App\Models\InformationRequest;
 use App\Models\Document;
 use App\Models\Category;
 use App\Models\Page;
+use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class PublicController extends Controller
 {
+    public function newsIndex()
+    {
+        // Ambil berita terbaru, 6 per halaman
+        $posts = Post::with('category', 'user')
+                    ->latest()
+                    ->paginate(6);
+
+        return view('frontend.news-index', compact('posts'));
+    }
     // Menampilkan Halaman Form
     public function showForm()
     {
@@ -100,5 +110,16 @@ class PublicController extends Controller
 
         // 3. Tampilkan ke view yang umum
         return view('frontend.documents', compact('category', 'documents'));
+    }
+    public function showNews($slug)
+    {
+        // Cari berita berdasarkan slug
+        $post = Post::where('slug', $slug)->firstOrFail();
+
+        // Fitur Tambahan: Tambah jumlah pembaca (Views) setiap kali dibuka
+        $post->increment('views');
+
+        // Tampilkan ke view
+        return view('frontend.news-detail', compact('post'));
     }
 }
