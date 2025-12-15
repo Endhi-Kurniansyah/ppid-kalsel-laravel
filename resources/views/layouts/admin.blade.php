@@ -79,6 +79,17 @@
                             </a>
                         </li>
 
+                        @if(auth()->user()->role == 'super')
+
+                            <li class="sidebar-title">Pengaturan Super</li>
+
+                            <li class="sidebar-item {{ Request::routeIs('admin.users.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.users.index') }}" class='sidebar-link'>
+                                    <i class="bi bi-people-fill"></i>
+                                    <span>Manajemen Admin</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -107,7 +118,7 @@
                                     <div class="user-menu d-flex align-items-center">
                                         <div class="user-name text-end me-3">
                                             <h6 class="mb-0 text-gray-600">{{ Auth::user()->name }}</h6>
-                                            @if(Auth::user()->role == 'super_admin')
+                                            @if(Auth::user()->role == 'super')
                                                 <span class="badge bg-danger user-role-badge">Super Admin</span>
                                             @else
                                                 <span class="badge bg-primary user-role-badge">Staf Admin</span>

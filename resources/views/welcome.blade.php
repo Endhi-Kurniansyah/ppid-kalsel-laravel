@@ -40,7 +40,7 @@
             </div>
 
             <div class="col-md-3 mb-4">
-                <a href="#" class="text-decoration-none text-dark">
+                <a href="requests.create" class="text-decoration-none text-dark">
                     <div class="card border-0 shadow-sm h-100 py-4 hover-zoom">
                         <div class="card-body">
                             <div class="mb-3 text-warning">

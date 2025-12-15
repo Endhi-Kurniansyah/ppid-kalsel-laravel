@@ -25,64 +25,112 @@ class PageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required|max:255',
             'content' => 'required',
         ]);
 
         Page::create([
-            'title' => $request->input('title'), // Gunakan input() biar lebih aman
-            'slug' => Str::slug($request->input('title')),
-            'content' => $request->input('content'), // Gunakan input()
+            'title' => $request->title,
+            'slug' => \Illuminate\Support\Str::slug($request->title),
+
+            // PAKAI INI:
+            'content' => $request->input('content'),
+
+            // Jangan pakai $request->content !
         ]);
 
         return redirect()->route('pages.index')->with('success', 'Halaman berhasil dibuat!');
     }
 
     // Form Edit
-    public function edit(Page $page)
+    public function edit($id)
     {
+        $page = Page::findOrFail($id);
+
         return view('admin.pages.edit', compact('page'));
     }
 
-    // Update DB
-    // Update DB
-    public function update(Request $request, Page $page)
+    public function update(Request $request, $id)
     {
+        $page = Page::findOrFail($id);
+
+        // 1. Validasi
         $request->validate([
-            'title' => 'required',
-            'content' => 'required', // Hapus validasi slug unique dulu biar ga ribet
+            'title' => 'required|max:255',
+            'content' => 'required',
         ]);
 
+        // 2. Update Data
         $page->update([
-            'title' => $request->input('title'),
+            'title'   => $request->title,
 
-            // TAMBAHKAN BARIS INI (Agar slug berubah mengikuti judul baru)
-            'slug' => Str::slug($request->input('title')),
+            // Pastikan pakai Str::slug (Huruf besar S)
+            'slug'    => \Illuminate\Support\Str::slug($request->title),
 
+            // --- INI PERBAIKANNYA ---
+            // Jangan pakai $request->content, tapi pakai input()
+            // supaya tidak bentrok dengan variabel sistem.
             'content' => $request->input('content'),
         ]);
 
-        return redirect()->route('pages.index')->with('success', 'Halaman berhasil diperbarui!');
+        return redirect()->route('pages.index')->with('success', 'Halaman berhasil diupdate!');
     }
 
-    // Hapus
-    public function destroy(Page $page)
+    public function destroy($id)
     {
-        // 1. CEK APAKAH HALAMAN INI TERKUNCI?
-        if ($page->is_static == 1) {
+        $page = Page::findOrFail($id);
 
-            // 2. JIKA TERKUNCI, CEK APAKAH YANG MENGHAPUS ITU SUPER ADMIN?
-            if (auth()->user()->role !== 'super_admin') {
-                // Kalau bukan Super Admin, TENDANG KELUAR!
-                abort(403, 'ANDA TIDAK MEMILIKI AKSES! Halaman ini dilindungi.');
-            }
+        // --- KEAMANAN TAMBAHAN ---
+        // Jika halaman terkunci DAN yang mau hapus BUKAN Super Admin, tolak!
+        if ($page->is_locked && auth()->user()->role !== 'super') {
+            return redirect()->back()->with('error', 'Halaman ini terkunci dan tidak bisa dihapus!');
+        }
+        // -------------------------
 
-            // Kalau Super Admin, boleh lanjut hapus (Force Delete)
+        // Lanjut proses hapus...
+        if ($page->is_static) {
+            return redirect()->back()->with('error', 'Halaman statis utama tidak bisa dihapus.');
         }
 
-        // Proses Hapus
         $page->delete();
-
         return redirect()->route('pages.index')->with('success', 'Halaman berhasil dihapus.');
+    }
+    public function toggleLock($id)
+    {
+        // 1. Cek apakah user adalah Super Admin
+        if (auth()->user()->role !== 'super') {
+            abort(403, 'Anda tidak memiliki akses untuk mengubah status kunci.');
+        }
+
+        $page = Page::findOrFail($id);
+
+        // 2. Ubah status (True jadi False, False jadi True)
+        $page->update([
+            'is_locked' => !$page->is_locked
+        ]);
+
+        $status = $page->is_locked ? 'dikunci' : 'dibuka kuncinya';
+        return back()->with('success', "Halaman berhasil $status.");
+    }
+    // FUNGSI KHUSUS UPLOAD GAMBAR DARI CKEDITOR
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            // 1. Ambil filenya
+            $file = $request->file('upload');
+
+            // 2. Beri nama unik (biar gak bentrok)
+            $fileName = time() . '_' . $file->getClientOriginalName();
+
+            // 3. Simpan di folder "public/uploads"
+            $file->storeAs('public/uploads', $fileName);
+
+            // 4. Balikin URL-nya ke CKEditor
+            return response()->json([
+                'url' => asset('storage/uploads/' . $fileName)
+            ]);
+        }
+
+        return response()->json(['error' => 'Gagal upload gambar.']);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User; // <--- PENTING: Saya tambahkan ini agar bisa panggil Model User
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,18 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+
+        // === 1. TAMBAHAN: CEK STATUS USER ===
+        // Cari user berdasarkan email yang dimasukkan
+        $user = User::where('email', $this->input('email'))->first();
+
+        // Jika usernya ada, TAPI statusnya tidak aktif (0), tolak login!
+        if ($user && !$user->is_active) {
+            throw ValidationException::withMessages([
+                'email' => 'Akun Anda telah dinonaktifkan/dikunci. Hubungi Super Admin.',
+            ]);
+        }
+        // ====================================
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
