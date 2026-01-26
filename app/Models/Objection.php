@@ -23,4 +23,5 @@ class Objection extends Model
     {
         return $this->belongsTo(InformationRequest::class, 'information_request_id');
     }
+
 }

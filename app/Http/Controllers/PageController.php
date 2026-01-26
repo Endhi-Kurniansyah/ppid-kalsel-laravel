@@ -133,4 +133,18 @@ class PageController extends Controller
 
         return response()->json(['error' => 'Gagal upload gambar.']);
     }
+    public function show($slug)
+    {
+        // 1. Cari halaman berdasarkan slug
+        // Pastikan statusnya 'published' atau 'active' (sesuaikan dengan database Mas)
+        $page = Page::where('slug', $slug)->first();
+
+        // 2. Jika tidak ketemu, tampilkan 404
+        if (!$page) {
+            abort(404);
+        }
+
+        // 3. Jika ketemu, kirim ke tampilan frontend
+        return view('frontend.page', compact('page'));
+    }
 }

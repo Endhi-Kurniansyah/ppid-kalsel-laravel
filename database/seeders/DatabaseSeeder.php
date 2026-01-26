@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
         // Karena CategorySeeder sudah dipisah, kita panggil di sini
         $this->call([
             CategorySeeder::class,
+            MenuSeeder::class,
         ]);
 
         // ==========================================
@@ -55,6 +56,18 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Tentang PPID', 'slug' => 'tentang-ppid', 'content' => '<p>Sejarah PPID...</p>'],
             ['title' => 'Struktur Organisasi', 'slug' => 'struktur-organisasi', 'content' => '<p>Gambar struktur...</p>'],
             ['title' => 'Tugas & Fungsi', 'slug' => 'tugas-fungsi', 'content' => '<p>Tugas dan fungsi...</p>'],
+
+            // TAMBAHAN BARU DI SINI:
+            [
+                'title' => 'Cara Memperoleh Informasi',
+                'slug' => 'cara-memperoleh-informasi',
+                'content' => '<p>Prosedur dan tata cara memperoleh informasi publik...</p>'
+            ],
+            [
+                'title' => 'Maklumat Pelayanan',
+                'slug' => 'maklumat-pelayanan',
+                'content' => '<p>Kami siap melayani Anda dengan sungguh-sungguh...</p>'
+            ],
         ];
 
         foreach ($halamanWajib as $halaman) {
@@ -63,7 +76,7 @@ class DatabaseSeeder extends Seeder
                 [
                     'title' => $halaman['title'],
                     'content' => $halaman['content'],
-                    'is_static' => 1, // Kunci Halaman
+                    'is_static' => 1, // Kita set 1 agar statusnya 'UTAMA' dan terkunci (tidak bisa dihapus sembarangan)
                 ]
             );
         }

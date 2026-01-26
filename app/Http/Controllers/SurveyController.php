@@ -13,46 +13,57 @@ class SurveyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'rating' => 'required|integer|between:1,5', // 1 sampai 5
-            'feedback' => 'nullable|string'
+            'rating' => 'required|integer|min:1|max:5',
+            'feedback' => 'nullable|string', // Pastikan validasi pakai feedback
         ]);
 
         Survey::create([
             'rating' => $request->rating,
+            // INI YANG BIKIN ERROR SEBELUMNYA.
+            // Ubah dari 'comment' => ... menjadi:
             'feedback' => $request->feedback,
-            'ip_address' => $request->ip() // Catat IP biar keren (Audit trail)
+            'ip_address' => $request->ip()
         ]);
 
-        return redirect()->back()->with('success_survey', 'Terima kasih atas penilaian Anda!');
+        return back()->with('success_survey', 'Terima kasih atas penilaian Anda!');
     }
 
     // 2. Fungsi Halaman Admin (Melihat Hasil)
-    public function index()
-    {
-        // Hitung jumlah vote per kategori (Group By)
-        // Contoh: Bintang 5 ada 10 orang, Bintang 4 ada 3 orang.
-        $results = Survey::select('rating', DB::raw('count(*) as total'))
-                         ->groupBy('rating')
-                         ->orderBy('rating', 'desc')
-                         ->get();
+    // Pastikan baris ini ada di paling atas file (di bawah namespace)
+    // use Illuminate\Http\Request;
+    // use Illuminate\Support\Facades\DB;
+    // use App\Models\Survey;
 
-        // Ambil data detail untuk tabel di bawahnya
-        $surveys = Survey::latest()->paginate(10);
+    public function index(Request $request)
+    {
+        // 1. Query Dasar (Termasuk perintah 'latest' / urutkan tanggal)
+        $query = Survey::latest();
+
+        // 2. Filter Bulan
+        if ($request->filled('month')) {
+            $query->whereMonth('created_at', $request->month);
+        }
+
+        // 3. Filter Tahun
+        if ($request->filled('year')) {
+            $query->whereYear('created_at', $request->year);
+        }
+
+        // 4. Ambil Data Statistik (Card)
+        // PERBAIKAN: Tambahkan ->reorder() untuk menghapus efek 'latest()'
+        $results = (clone $query)
+            ->reorder() // <--- INI SOLUSINYA. Hapus urutan tanggal biar gak error Group By
+            ->select('rating', DB::raw('count(*) as total'))
+            ->groupBy('rating')
+            ->orderBy('rating', 'desc')
+            ->get();
+
+        // 5. Ambil Data Tabel
+        // Kalau tabel tetap butuh 'latest()', jadi biarkan saja
+        $surveys = (clone $query)
+            ->paginate(10)
+            ->appends($request->all());
 
         return view('admin.surveys.index', compact('results', 'surveys'));
-    }
-
-    // 3. Fungsi Cetak Laporan PDF
-    public function print()
-    {
-        $surveys = Survey::latest()->get();
-
-        // Hitung rata-rata kepuasan
-        $average = Survey::avg('rating');
-
-        $pdf = Pdf::loadView('admin.surveys.print', compact('surveys', 'average'));
-        $pdf->setPaper('a4', 'portrait');
-
-        return $pdf->stream('laporan-survei-kepuasan.pdf');
     }
 }

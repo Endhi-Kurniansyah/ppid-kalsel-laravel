@@ -24,8 +24,6 @@ class InformationRequest extends Model
         'ticket_number',
         'details',
         'purpose',
-        'get_method',
-        'delivery_method',
 
         // Admin
         'status',

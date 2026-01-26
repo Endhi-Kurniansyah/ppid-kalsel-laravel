@@ -11,10 +11,26 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    // 1. TAMPILKAN DAFTAR BERITA
-    public function index()
+    // 1. TAMPILKAN DAFTAR BERITA DENGAN FILTER
+    public function index(Request $request)
     {
-        $posts = Post::with('category')->latest()->get();
+        // Mulai Query
+        $query = Post::with('category', 'user')->latest();
+
+        // Filter Bulan
+        if ($request->filled('month')) {
+            $query->whereMonth('created_at', $request->month);
+        }
+
+        // Filter Tahun
+        if ($request->filled('year')) {
+            $query->whereYear('created_at', $request->year);
+        }
+
+        // Ambil Data
+        // Saya sarankan pakai paginate(10) biar halaman tidak berat jika beritanya ratusan
+        $posts = $query->paginate(10)->appends($request->all());
+
         return view('admin.posts.index', compact('posts'));
     }
 

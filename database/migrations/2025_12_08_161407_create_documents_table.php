@@ -14,18 +14,28 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description')->nullable();
-            $table->foreignId('category_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->date('published_date')->nullable();
+
+            // --- INI PERUBAHANNYA ---
+            // Kita ubah jadi string biasa (teks), bukan foreignId.
+            // Supaya Mas bisa langsung simpan 'sop', 'berkala', dll.
+            $table->string('category');
+            // ------------------------
+
             $table->string('file_path');
+
+            // Deskripsi boleh kosong
+            $table->text('description')->nullable();
+
+            // Tanggal terbit (opsional, kalau kosong pakai created_at saja)
+            $table->date('published_date')->nullable();
+
+            // Kita hapus user_id dulu biar gak ribet error login
+            // $table->foreignId('user_id')->constrained();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('documents');

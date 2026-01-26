@@ -27,8 +27,6 @@ return new class extends Migration
             $table->string('ticket_number')->unique(); // Kode Tiket (REQ-001)
             $table->text('details');            // Rincian Info
             $table->text('purpose');            // Tujuan Penggunaan
-            $table->string('get_method')->default('softcopy');      // Softcopy/Hardcopy
-            $table->string('delivery_method')->default('email');    // Email/Langsung
 
             // --- BAGIAN 3: STATUS & ADMIN ---
             $table->string('status')->default('pending'); // pending, processed, finished, rejected

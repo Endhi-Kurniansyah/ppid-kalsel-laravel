@@ -1,74 +1,161 @@
 @extends('layouts.admin')
 
-@section('page-title', 'Daftar Permohonan Informasi')
-
 @section('content')
+{{--
+    CONTAINER UTAMA:
+    - height: calc(100vh - 80px) -> Pas layar
+    - overflow: hidden -> Mencegah scroll body browser
+--}}
+<div class="container-fluid d-flex flex-column p-4" style="height: calc(100vh - 80px); background-color: #f8fafc; overflow: hidden;">
 
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Data Masuk</h5>
+    {{-- 1. HEADER & ACTIONS --}}
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-end mb-3 flex-shrink-0">
+        <div>
+            <h4 class="fw-bold text-dark mb-1">Permohonan Informasi</h4>
+            <p class="text-muted small mb-0">Kelola dan proses permintaan data publik dari masyarakat.</p>
+        </div>
 
-        <a href="{{ route('admin.requests.print') }}" class="btn btn-danger btn-sm" target="_blank">
-            <i class="bi bi-file-pdf-fill"></i> Cetak Laporan
-        </a>
+        <div class="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center">
+            {{-- FORM FILTER (COMPACT) --}}
+            <form action="{{ route('admin.requests.index') }}" method="GET" class="d-flex gap-1">
+                <select name="month" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white" style="width: 110px; border-radius: 20px; font-size: 0.75rem;">
+                    <option value="">Bulan</option>
+                    @foreach(range(1, 12) as $m)
+                        <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }}>
+                            {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <select name="year" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white text-center" style="width: 80px; border-radius: 20px; font-size: 0.75rem;">
+                    <option value="">Tahun</option>
+                    @foreach(range(date('Y'), 2020) as $y)
+                        <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endforeach
+                </select>
+
+                <button type="submit" class="btn btn-primary btn-sm rounded-circle shadow-sm d-flex align-items-center justify-content-center hover-scale" style="width: 32px; height: 32px; background-color: #0f172a; border: none;">
+                    <i class="bi bi-funnel-fill" style="font-size: 0.8rem;"></i>
+                </button>
+            </form>
+
+            <div class="vr mx-1 opacity-10 d-none d-md-block"></div>
+
+            {{-- CETAK LAPORAN --}}
+            <a href="{{ route('admin.reports.requests', request()->all()) }}" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold d-flex align-items-center gap-2 hover-scale" style="font-size: 0.75rem;">
+                <i class="bi bi-file-earmark-pdf"></i> Cetak Laporan
+            </a>
+        </div>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover" id="table1">
-                <thead>
-                    <tr>
-                        <th>Tiket</th>
-                        <th>Tgl Masuk</th>
-                        <th>Nama Pemohon</th>
-                        <th>Kebutuhan</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+
+    {{-- 2. TABLE CARD (SCROLLABLE INTERNAL) --}}
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden flex-grow-1 d-flex flex-column bg-white">
+
+        {{-- Header Tabel --}}
+        <div class="card-header bg-white py-3 px-4 border-bottom d-flex justify-content-between align-items-center flex-shrink-0">
+            <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-inboxes me-2 text-primary"></i>Data Masuk</h6>
+            <span class="badge bg-light text-primary border rounded-pill fw-normal px-3">Total: {{ $requests->total() }} Permohonan</span>
+        </div>
+
+        {{-- Body Tabel (Scrollable Area) --}}
+        <div class="card-body p-0 overflow-auto custom-scrollbar position-relative">
+            <table class="table table-hover align-middle mb-0 w-100 text-nowrap">
+                <thead class="bg-light text-secondary sticky-top" style="z-index: 5;">
+                    <tr class="text-muted small text-uppercase fw-bold">
+                        <th class="ps-4 py-3 border-0 bg-light">Tiket & Tgl</th>
+                        <th class="py-3 border-0 bg-light">Nama Pemohon</th>
+                        <th class="py-3 border-0 bg-light">Rincian Kebutuhan</th>
+                        <th class="py-3 border-0 bg-light">Status</th>
+                        <th class="py-3 border-0 text-end pe-4 bg-light">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($requests as $req)
                     <tr>
-                        <td>
-                            <span class="fw-bold text-primary">{{ $req->ticket_number }}</span>
-                        </td>
-                        <td>{{ $req->created_at->format('d M Y') }}</td>
-                        <td>
-                            {{ $req->name }}
-                            <br>
-                            <small class="text-muted">{{ $req->phone }}</small>
+                        <td class="ps-4">
+                            <div class="fw-bold text-primary mb-0" style="font-size: 0.85rem;">{{ $req->ticket_number }}</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">
+                                <i class="bi bi-calendar-event me-1"></i>{{ $req->created_at->format('d M Y') }}
+                            </small>
                         </td>
                         <td>
-                            {{ Str::limit($req->details, 40) }}
+                            <div class="fw-bold text-dark mb-0" style="font-size: 0.8rem;">{{ $req->name }}</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">
+                                <i class="bi bi-telephone me-1"></i>{{ $req->phone }}
+                            </small>
                         </td>
                         <td>
-                            @if($req->status == 'pending')
-                                <span class="badge bg-warning text-dark">Menunggu</span>
-                            @elseif($req->status == 'processed')
-                                <span class="badge bg-info text-dark">Diproses</span>
-                            @elseif($req->status == 'finished')
-                                <span class="badge bg-success">Selesai</span>
-                            @elseif($req->status == 'rejected')
-                                <span class="badge bg-danger">Ditolak</span>
-                            @endif
+                            <div class="text-muted small text-truncate" style="max-width: 250px;" title="{{ $req->details }}">
+                                {{ Str::limit($req->details, 50) }}
+                            </div>
                         </td>
                         <td>
-                            <a href="{{ route('admin.requests.show', $req->id) }}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-eye"></i> Proses
+                            @php
+                                $statusConfig = [
+                                    'pending'   => ['label' => 'Menunggu', 'class' => 'bg-warning bg-opacity-10 text-dark border-warning'],
+                                    'processed' => ['label' => 'Diproses', 'class' => 'bg-info bg-opacity-10 text-info border-info'],
+                                    'finished'  => ['label' => 'Selesai', 'class' => 'bg-success bg-opacity-10 text-success border-success'],
+                                    'rejected'  => ['label' => 'Ditolak', 'class' => 'bg-danger bg-opacity-10 text-danger border-danger']
+                                ];
+                                $currentStatus = $statusConfig[$req->status] ?? ['label' => $req->status, 'class' => 'bg-secondary bg-opacity-10 text-secondary border-secondary'];
+                            @endphp
+                            <span class="badge {{ $currentStatus['class'] }} border rounded-pill px-3 py-1 fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                {{ strtoupper($currentStatus['label']) }}
+                            </span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <a href="{{ route('admin.requests.show', $req->id) }}" class="btn btn-sm btn-light border rounded-pill px-3 fw-bold text-primary hover-scale" style="font-size: 0.7rem;">
+                                PROSES <i class="bi bi-chevron-right ms-1"></i>
                             </a>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">
-                            <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-box-4085812-3385481.png" style="width: 100px; opacity: 0.5;">
-                            <p class="mt-2">Belum ada permohonan informasi baru.</p>
+                        <td colspan="5" class="text-center py-5">
+                            <div class="opacity-25 mb-3"><i class="bi bi-inbox display-4"></i></div>
+                            <p class="text-muted small mb-0">Belum ada permohonan informasi masuk.</p>
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+
+        {{-- Footer Tabel / Pagination --}}
+        @if($requests->hasPages())
+        <div class="card-footer bg-white border-top py-2 px-4 flex-shrink-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted font-monospace" style="font-size: 0.7rem;">
+                    Data {{ $requests->firstItem() }}-{{ $requests->lastItem() }} dari {{ $requests->total() }}
+                </small>
+                <div class="pagination-sm">
+                    {{ $requests->appends(request()->all())->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
+
+{{-- CSS KHUSUS --}}
+<style>
+    /* Paksa Body Tidak Scroll */
+    html, body { height: 100%; overflow: hidden !important; background-color: #f8fafc; }
+
+    /* Scrollbar Halus */
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Hover & Transitions */
+    .hover-scale { transition: transform 0.2s ease; }
+    .hover-scale:hover { transform: scale(1.05); }
+
+    /* Pagination Styling Compact */
+    .pagination { margin-bottom: 0; gap: 2px; }
+    .page-link { padding: 0.25rem 0.6rem; font-size: 0.75rem; border-radius: 6px !important; border: none; color: #64748b; }
+    .page-item.active .page-link { background-color: #0d6efd; color: white; border: none; }
+</style>
 
 @endsection

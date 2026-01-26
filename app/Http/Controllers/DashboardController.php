@@ -12,16 +12,14 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // 1. Hitung Data Statistik
+        // Ambil data
         $totalRequests   = InformationRequest::count();
         $pendingRequests = InformationRequest::where('status', 'pending')->count();
         $totalPosts      = Post::count();
         $totalDocs       = Document::count();
-
-        // 2. Ambil 5 Permohonan Terbaru (buat tabel mini)
         $latestRequests  = InformationRequest::latest()->take(5)->get();
 
-        // 3. Kirim data ke View Dashboard
+        // Pastikan SEMUA ada di dalam compact ini
         return view('admin.dashboard', compact(
             'totalRequests',
             'pendingRequests',
