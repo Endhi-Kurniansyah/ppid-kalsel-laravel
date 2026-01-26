@@ -41,6 +41,9 @@
                             <button class="nav-link text-start py-3 px-4 border-0 rounded-3 fw-bold small text-uppercase ls-1" data-bs-toggle="pill" data-bs-target="#tab-social" type="button">
                                 <i class="bi bi-share me-2"></i> Media Sosial
                             </button>
+                            <button class="nav-link text-start py-3 px-4 border-0 rounded-3 fw-bold small text-uppercase ls-1" data-bs-toggle="pill" data-bs-target="#tab-report" type="button">
+                                <i class="bi bi-file-earmark-pdf me-2"></i> Laporan (PDF)
+                            </button>
                         </div>
                     </div>
 
@@ -134,9 +137,22 @@
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <div class="p-4 border border-light rounded-4 bg-white">
+                                        <div class="p-4 border border-light rounded-4 bg-white mt-0">
                                             <label class="fw-bold text-muted small text-uppercase mb-3 d-block ls-1">Alamat Kantor Lengkap</label>
-                                            <textarea name="footer_address" class="form-control border-0 bg-light shadow-none" rows="4">{{ $settings['footer_address'] ?? '' }}</textarea>
+                                            <textarea name="footer_address" class="form-control border-0 bg-light shadow-none" rows="3">{{ $settings['footer_address'] ?? '' }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="p-4 border border-light rounded-4 bg-white mt-0">
+                                            <label class="fw-bold text-muted small text-uppercase mb-3 d-block ls-1">Link Google Maps (Embed)</label>
+                                            <textarea name="contact_google_maps_link" class="form-control border-0 bg-light shadow-none text-muted small" rows="3" placeholder='Pastikan link berawalan: https://www.google.com/maps/embed...'>{{ $settings['contact_google_maps_link'] ?? '' }}</textarea>
+                                            <div class="alert alert-info border-0 d-flex align-items-start small p-2 mt-2">
+                                                <i class="bi bi-info-circle-fill me-2 fs-5 text-primary"></i>
+                                                <div>
+                                                    <strong>PENTING:</strong> Link pendek seperti <code>maps.app.goo.gl</code> <u>TIDAK BISA</u> digunakan.<br>
+                                                    Caranya: Buka Google Maps > Cari lokasi > Klik tombol <strong>Bagikan</strong> (Share) > Pilih <strong>Sematkan Peta</strong> (Embed a map) > Salin HTML-nya > Tempel di sini.
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -167,6 +183,44 @@
                                         </div>
                                     </div>
                                     @endforeach
+                                </div>
+                            </div>
+
+                            {{-- TAB: PENGATURAN LAPORAN (PDF) --}}
+                            <div class="tab-pane fade" id="tab-report" role="tabpanel">
+                                <h6 class="fw-bold text-dark mb-4 border-bottom pb-2 text-uppercase ls-1">Konfigurasi Kop & Tanda Tangan Laporan</h6>
+                                <div class="row g-4">
+                                    <div class="col-12">
+                                        <div class="p-4 border border-light rounded-4 bg-white">
+                                            <h6 class="fw-bold mb-4 small text-primary text-uppercase ls-1"><i class="bi bi-building me-2"></i>Kop Surat</h6>
+                                            <label class="fw-bold text-muted small text-uppercase mb-3 d-block ls-1">Alamat Kop Surat</label>
+                                            <textarea name="report_header_address" class="form-control border-0 bg-light shadow-none" rows="3" placeholder="Alamat lengkap instansi untuk header laporan...">{{ $settings['report_header_address'] ?? '' }}</textarea>
+                                            <small class="text-muted mt-2 d-block">Jika dikosongkan, akan menggunakan alamat dari footer website.</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="p-4 border border-light rounded-4 bg-white">
+                                            <h6 class="fw-bold mb-4 small text-primary text-uppercase ls-1"><i class="bi bi-pen me-2"></i>Penanda Tangan (Pejabat)</h6>
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-bold text-muted">Nama Lengkap & Gelar</label>
+                                                    <input type="text" name="report_signer_name" class="form-control border-0 bg-light shadow-none" value="{{ $settings['report_signer_name'] ?? '' }}" placeholder="Contoh: Dr. H. MUHAMAD MUSLIM, S.Pd., M.Kes.">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-bold text-muted">NIP</label>
+                                                    <input type="text" name="report_signer_nip" class="form-control border-0 bg-light shadow-none" value="{{ $settings['report_signer_nip'] ?? '' }}">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-bold text-muted">Jabatan</label>
+                                                    <input type="text" name="report_signer_position" class="form-control border-0 bg-light shadow-none" value="{{ $settings['report_signer_position'] ?? '' }}" placeholder="Contoh: Pejabat Pengelola PPID">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-label small fw-bold text-muted">Pangkat / Golongan</label>
+                                                    <input type="text" name="report_signer_rank" class="form-control border-0 bg-light shadow-none" value="{{ $settings['report_signer_rank'] ?? '' }}" placeholder="Contoh: Pembina Utama Muda">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

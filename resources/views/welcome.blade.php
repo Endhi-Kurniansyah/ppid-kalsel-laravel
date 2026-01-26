@@ -38,7 +38,7 @@
 
         {{-- SEARCH BOX MODERN (LEBIH BESAR & JELAS) --}}
         <div class="search-wrapper mx-auto animate-fade-up delay-200">
-            <form action="{{ route('documents.search') }}" method="GET">
+            <form action="{{ route('global.search') }}" method="GET">
                 <div class="input-group search-group shadow-lg">
                     {{-- Icon Kiri --}}
                     <span class="input-group-text bg-white border-0 ps-4">

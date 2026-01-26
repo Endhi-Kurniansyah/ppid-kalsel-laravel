@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Gallery; // Import Gallery
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -63,7 +64,17 @@ class PostController extends Controller
         ];
 
         if ($request->file('image')) {
-            $data['image'] = $request->file('image')->store('post-images', 'public');
+            $path = $request->file('image')->store('post-images', 'public');
+            $data['image'] = $path;
+
+            // OTOMATIS MASUK GALERI
+            Gallery::create([
+                'title'     => $request->input('title'),
+                'description' => 'Dokumentasi Berita: ' . Str::limit(strip_tags($request->input('content')), 150),
+                'type'      => 'image',
+                'file_path' => $path,
+                'is_active' => true,
+            ]);
         }
 
         Post::create($data);
@@ -96,10 +107,25 @@ class PostController extends Controller
         ];
 
         if ($request->file('image')) {
+            // Hapus gambar lama JIKA tidak ada di galeri (agar galeri tidak rusak)
             if ($post->image) {
-                Storage::delete($post->image);
+                $isUsedInGallery = Gallery::where('file_path', $post->image)->exists();
+                if (!$isUsedInGallery) {
+                    Storage::delete($post->image);
+                }
             }
-            $data['image'] = $request->file('image')->store('post-images', 'public');
+
+            $path = $request->file('image')->store('post-images', 'public');
+            $data['image'] = $path;
+
+            // OTOMATIS TAMBAH FOTO BARU KE GALERI
+            Gallery::create([
+                'title'     => $request->input('title'),
+                'description' => 'Update Berita: ' . Str::limit(strip_tags($request->input('content')), 150),
+                'type'      => 'image',
+                'file_path' => $path,
+                'is_active' => true,
+            ]);
         }
 
         $post->update($data);
@@ -111,7 +137,11 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         if ($post->image) {
-            Storage::delete($post->image);
+            // Cek apakah gambar digunakan di galeri
+            $isUsedInGallery = Gallery::where('file_path', $post->image)->exists();
+            if (!$isUsedInGallery) {
+                Storage::delete($post->image);
+            }
         }
 
         $post->delete();

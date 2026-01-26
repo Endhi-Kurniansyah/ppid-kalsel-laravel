@@ -30,6 +30,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+            'captcha' => ['required', 'captcha'],
         ];
     }
 
@@ -42,18 +43,6 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        // === 1. TAMBAHAN: CEK STATUS USER ===
-        // Cari user berdasarkan email yang dimasukkan
-        $user = User::where('email', $this->input('email'))->first();
-
-        // Jika usernya ada, TAPI statusnya tidak aktif (0), tolak login!
-        if ($user && !$user->is_active) {
-            throw ValidationException::withMessages([
-                'email' => 'Akun Anda telah dinonaktifkan/dikunci. Hubungi Super Admin.',
-            ]);
-        }
-        // ====================================
-
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
@@ -61,6 +50,16 @@ class LoginRequest extends FormRequest
                 'email' => trans('auth.failed'),
             ]);
         }
+
+        // --- TAMBAHKAN LOGIKA INI ---
+        $user = Auth::user();
+        if (! $user->is_active) {
+            Auth::logout(); // Paksa keluar jika status tidak aktif
+            throw ValidationException::withMessages([
+                'email' => 'MAAF, AKUN ANDA TELAH DITANGGUHKAN! Silakan hubungi Super Admin.',
+            ]);
+        }
+        // ----------------------------
 
         RateLimiter::clear($this->throttleKey());
     }

@@ -34,7 +34,7 @@
         {{-- FORM PENCARIAN (HERO STYLE) --}}
         <div class="row justify-content-center animate-fade-up delay-200">
             <div class="col-lg-7">
-                <form action="{{ route('documents.public') }}" method="GET">
+                <form action="{{ request()->url() }}" method="GET">
                     @if(request('category'))
                         <input type="hidden" name="category" value="{{ request('category') }}">
                     @endif
@@ -51,14 +51,7 @@
                     </div>
                 </form>
 
-                @if(request('q'))
-                    <div class="mt-3 text-white small">
-                        <i class="bi bi-info-circle me-1"></i> Hasil pencarian: <strong class="text-warning">"{{ request('q') }}"</strong>
-                        <a href="{{ route('documents.public', ['category' => request('category')]) }}" class="badge bg-danger ms-2 text-decoration-none border border-light">
-                            <i class="bi bi-x-lg"></i> Reset
-                        </a>
-                    </div>
-                @endif
+
             </div>
         </div>
     </div>
@@ -79,6 +72,13 @@
 
         <div class="row justify-content-center">
             <div class="col-lg-8">
+
+                {{-- Hasil Pencarian Info --}}
+                @if(request('q'))
+                    <div class="alert alert-light border shadow-sm mb-4 d-flex justify-content-between align-items-center animate-fade-up">
+                        <span><i class="bi bi-info-circle me-2 text-primary"></i> Menampilkan hasil pencarian: <strong>"{{ request('q') }}"</strong></span>
+                    </div>
+                @endif
 
                 {{-- LIST DOKUMEN --}}
                 <div class="d-flex flex-column gap-3">
@@ -129,13 +129,8 @@
                             <div class="mb-3 opacity-25">
                                 <i class="bi bi-folder-x fs-1 text-dark"></i>
                             </div>
-                            <h5 class="fw-bold text-dark">Dokumen Tidak Ditemukan</h5>
-                            <p class="text-muted">
-                                Coba kata kunci lain atau ubah kategori pencarian.
-                            </p>
-                            <a href="{{ route('documents.public') }}" class="btn btn-outline-primary rounded-pill px-4 mt-2">
-                                <i class="bi bi-arrow-clockwise me-1"></i> Reset Pencarian
-                            </a>
+                            <h5 class="fw-bold text-dark">Dokumen tidak ditemukan.</h5>
+                            <p class="text-muted">Silakan coba kata kunci lain.</p>
                         </div>
                     @endforelse
                 </div>

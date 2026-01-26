@@ -70,7 +70,6 @@
                 @if(request('q'))
                     <div class="alert alert-light border shadow-sm mb-4 d-flex justify-content-between align-items-center animate-fade-up">
                         <span><i class="bi bi-info-circle me-2 text-primary"></i> Menampilkan hasil pencarian: <strong>"{{ request('q') }}"</strong></span>
-                        <a href="{{ route('news.index') }}" class="btn btn-sm btn-outline-danger rounded-pill px-3">Reset</a>
                     </div>
                 @endif
 

@@ -70,7 +70,7 @@
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="fw-bold mb-1 text-uppercase text-muted small ls-1">Alamat</h6>
                                         <p class="text-dark mb-0 fw-medium small" style="line-height: 1.5;">
-                                            Jl. Dharma Praja II, Kawasan Perkantoran Pemprov Kalsel, Banjarbaru.
+                                            {{ $globalSettings['footer_address'] ?? 'Alamat belum diatur.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -84,8 +84,8 @@
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="fw-bold mb-1 text-uppercase text-muted small ls-1">Email Resmi</h6>
-                                        <a href="mailto:diskominfo@kalselprov.go.id" class="text-dark text-decoration-none fw-bold small stretched-link hover-primary">
-                                            diskominfo@kalselprov.go.id
+                                        <a href="mailto:{{ $globalSettings['footer_email'] ?? '#' }}" class="text-dark text-decoration-none fw-bold small stretched-link hover-primary">
+                                            {{ $globalSettings['footer_email'] ?? 'email@example.com' }}
                                         </a>
                                     </div>
                                 </div>
@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="fw-bold mb-1 text-uppercase text-muted small ls-1">Telepon / Fax</h6>
-                                        <p class="text-dark mb-0 fw-bold small">(0511) 6749844</p>
+                                        <p class="text-dark mb-0 fw-bold small">{{ $globalSettings['footer_phone'] ?? '-' }}</p>
                                     </div>
                                 </div>
 
@@ -112,8 +112,8 @@
                                         <h6 class="fw-bold mb-0 text-uppercase text-dark small ls-1">Jam Pelayanan</h6>
                                     </div>
                                     <ul class="list-unstyled mb-0 small fw-medium text-secondary ps-2 border-start border-3 border-warning">
-                                        <li class="d-flex justify-content-between mb-1 px-3"><span>Senin - Kamis</span> <span class="fw-bold text-dark">08:00 - 16:00</span></li>
-                                        <li class="d-flex justify-content-between mb-1 px-3"><span>Jumat</span> <span class="fw-bold text-dark">08:00 - 11:00</span></li>
+                                        <li class="d-flex justify-content-between mb-1 px-3"><span>Senin - Kamis</span> <span class="fw-bold text-dark">{{ $globalSettings['footer_hours_weekday'] ?? '08:00 - 16:00' }}</span></li>
+                                        <li class="d-flex justify-content-between mb-1 px-3"><span>Jumat</span> <span class="fw-bold text-dark">{{ $globalSettings['footer_hours_friday'] ?? '08:00 - 11:00' }}</span></li>
                                         <li class="d-flex justify-content-between px-3 text-danger fw-bold"><span>Sabtu - Minggu</span> <span>LIBUR</span></li>
                                     </ul>
                                 </div>
@@ -126,7 +126,7 @@
                     <div class="col-lg-7 animate-fade-up delay-200">
                         <div class="card border-0 shadow-lg h-100 rounded-4 overflow-hidden p-1 bg-white">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.457997576274!2d114.83398931475837!3d-3.480287997467644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2de6810a9c7969bf%3A0x67004396009623e1!2sDinas%20Komunikasi%20dan%20Informatika%20Provinsi%20Kalimantan%20Selatan!5e0!3m2!1sid!2sid!4v1679888273841!5m2!1sid!2sid"
+                                src="{{ $globalSettings['contact_google_maps_link'] ?? 'https://www.google.com/maps/embed?pb=...' }}"
                                 width="100%"
                                 height="100%"
                                 style="border:0; min-height: 500px; border-radius: 12px;"

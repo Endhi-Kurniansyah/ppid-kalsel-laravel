@@ -25,11 +25,29 @@
         <h1 class="display-4 fw-bold mb-3 animate-fade-up text-white">
             Hasil <span class="text-gradient-gold">Pencarian</span>
         </h1>
-
-        {{-- Deskripsi Kata Kunci --}}
         <p class="text-white lead opacity-90 mb-5 animate-fade-up delay-100" style="max-width: 700px; margin: 0 auto; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">
-            Menampilkan hasil untuk kata kunci: <strong class="text-warning fst-italic">"{{ $keyword ?? request('q') }}"</strong>
+            Hasil pencarian Berita dan dokumen.
         </p>
+
+        {{-- Deskripsi Kata Kunci (DIHAPUS SESUAI REQUEST) --}}
+
+        {{-- FORM PENCARIAN (HERO STYLE) --}}
+        <div class="row justify-content-center animate-fade-up delay-200">
+            <div class="col-lg-7">
+                <form action="{{ route('global.search') }}" method="GET">
+                    <div class="input-group search-group shadow-lg">
+                        <span class="input-group-text bg-white border-0 ps-4">
+                            <i class="bi bi-search text-primary fs-5"></i>
+                        </span>
+                        <input type="text" name="q" class="form-control border-0 py-3 ps-3"
+                               placeholder="Cari berita atau dokumen..."
+                               value="{{ $keyword ?? request('q') }}"
+                               style="font-size: 1.1rem;">
+                        <button class="btn btn-primary px-4 fw-bold" type="submit">CARI</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     {{-- Wave Separator (Putih) --}}
@@ -43,74 +61,110 @@
 {{-- 2. DAFTAR HASIL --}}
 <div class="py-5 bg-white" style="min-height: 600px;">
     {{-- Margin negatif tarik ke atas --}}
-    <div class="container" style="margin-top: -100px; position: relative; z-index: 10;">
+    <div class="container" style="margin-top: -60px; position: relative; z-index: 10;">
         <div class="row justify-content-center">
-            <div class="col-lg-10">
+            <div class="col-lg-8">
 
-                <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-4">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="fw-bold text-dark mb-0">
-                                <i class="bi bi-file-earmark-text me-2 text-primary"></i> Ditemukan {{ $documents->total() }} dokumen
-                            </h5>
-                            <a href="{{ url('/') }}" class="btn btn-outline-secondary btn-sm rounded-pill fw-bold">
-                                <i class="bi bi-house-door-fill me-1"></i> Kembali
-                            </a>
-                        </div>
+                {{-- Hasil Pencarian Info (ADDED TO MATCH USER REQUEST) --}}
+                @if(request('q') || isset($keyword))
+                    <div class="alert alert-light border shadow-sm mb-4 d-flex justify-content-between align-items-center animate-fade-up">
+                        <span><i class="bi bi-info-circle me-2 text-primary"></i> Menampilkan hasil pencarian: <strong>"{{ $keyword ?? request('q') }}"</strong></span>
                     </div>
-                </div>
+                @endif
 
-                @if($documents->count() > 0)
-                    <div class="row g-4">
-                        @foreach($documents as $doc)
-                        <div class="col-lg-6">
-                            <div class="card h-100 border-0 shadow-sm hover-lift rounded-4 overflow-hidden doc-card">
-                                <div class="card-body p-4 d-flex align-items-start">
-                                    {{-- Icon --}}
-                                    <div class="flex-shrink-0 me-3">
-                                        <div class="doc-icon bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px;">
-                                            <i class="bi bi-file-earmark-text-fill fs-4"></i>
-                                        </div>
-                                    </div>
+                {{-- SUMMARY REMOVED AS REQUESTED --}}
 
-                                    {{-- Content --}}
-                                    <div class="flex-grow-1">
-                                        <h6 class="fw-bold mb-1">
-                                            <a href="{{ route('documents.public.show', $doc->id) }}" class="text-dark text-decoration-none stretched-link hover-title">
-                                                {{ $doc->title }}
-                                            </a>
-                                        </h6>
-                                        <p class="text-muted small mb-2 text-truncate-2">
-                                            {{ Str::limit(strip_tags($doc->description), 100) }}
-                                        </p>
-                                        <div class="d-flex align-items-center small text-muted">
-                                            <span class="badge bg-light text-primary border me-2">{{ $doc->category }}</span>
-                                            <span><i class="bi bi-calendar3 me-1"></i> {{ $doc->created_at->format('d M Y') }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-
-                    {{-- Pagination --}}
-                    <div class="mt-5 d-flex justify-content-center">
-                        {{ $documents->appends(['q' => request('q')])->links() }}
-                    </div>
-
-                @else
-                    {{-- TAMPILAN JIKA KOSONG --}}
+                @if($posts->count() == 0 && $documents->count() == 0)
+                    {{-- TAMPILAN JIKA KOSONG (MATCHING NEWS STYLE) --}}
                     <div class="text-center py-5">
                         <div class="mb-3 opacity-25">
                             <i class="bi bi-search fs-1 text-dark"></i>
                         </div>
-                        <h4 class="fw-bold text-dark">Oops, tidak ditemukan!</h4>
-                        <p class="text-muted">Maaf, kami tidak menemukan dokumen dengan kata kunci <strong class="text-danger">"{{ $keyword ?? request('q') }}"</strong>.</p>
-                        <a href="{{ route('documents.public') }}" class="btn btn-primary rounded-pill px-4 mt-2 shadow-sm">
-                            <i class="bi bi-list-ul me-2"></i> Lihat Semua Dokumen
-                        </a>
+                        <h5 class="fw-bold text-dark">Tidak ditemukan hasil pencarian.</h5>
+                        <p class="text-muted">Silakan coba kata kunci lain.</p>
                     </div>
+                @else
+                    {{-- 1. HASIL BERITA --}}
+                    @if($posts->count() > 0)
+                    <div class="mb-5">
+                        <div class="d-flex align-items-center mb-4">
+                            <h4 class="fw-bold text-dark mb-0 me-3"><i class="bi bi-newspaper text-primary me-2"></i> Berita Terkait</h4>
+                            <div class="flex-grow-1 border-bottom"></div>
+                        </div>
+
+                        <div class="row g-4">
+                            @foreach($posts as $post)
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card h-100 border-0 shadow-sm hover-lift rounded-4 overflow-hidden">
+                                     <div class="position-relative">
+                                         @if($post->image)
+                                            <img src="{{ asset('storage/' . $post->image) }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ $post->title }}">
+                                         @else
+                                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                                <i class="bi bi-image text-muted fs-1"></i>
+                                            </div>
+                                         @endif
+                                         <span class="badge bg-primary position-absolute top-0 end-0 m-3">{{ $post->category->name ?? 'Umum' }}</span>
+                                     </div>
+                                     <div class="card-body p-4">
+                                         <small class="text-muted d-block mb-2"><i class="bi bi-calendar-event me-1"></i> {{ $post->created_at->format('d M Y') }}</small>
+                                         <h6 class="fw-bold mb-2 line-clamp-2">
+                                             <a href="{{ route('news.show', $post->slug) }}" class="text-dark text-decoration-none stretched-link">{{ $post->title }}</a>
+                                         </h6>
+                                     </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                         @if($posts->count() >= 6)
+                            <div class="text-center mt-3">
+                                <a href="{{ route('news.index', ['q' => $keyword]) }}" class="btn btn-outline-primary rounded-pill btn-sm">Lihat Semua Berita <i class="bi bi-arrow-right ms-1"></i></a>
+                            </div>
+                         @endif
+                    </div>
+                    @endif
+
+                    {{-- 2. HASIL DOKUMEN --}}
+                    @if($documents->count() > 0)
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center mb-4">
+                            <h4 class="fw-bold text-dark mb-0 me-3"><i class="bi bi-file-earmark-text text-warning me-2"></i> Dokumen Terkait</h4>
+                            <div class="flex-grow-1 border-bottom"></div>
+                        </div>
+
+                        <div class="row g-4">
+                            @foreach($documents as $doc)
+                            <div class="col-lg-6">
+                                <div class="card h-100 border-0 shadow-sm hover-lift rounded-4 overflow-hidden doc-card">
+                                    <div class="card-body p-4 d-flex align-items-start">
+                                        <div class="flex-shrink-0 me-3">
+                                            <div class="doc-icon bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px;">
+                                                <i class="bi bi-file-earmark-text-fill fs-4"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="fw-bold mb-1">
+                                                <a href="{{ route('documents.public.show', $doc->id) }}" class="text-dark text-decoration-none stretched-link hover-title">
+                                                    {{ $doc->title }}
+                                                </a>
+                                            </h6>
+                                            <div class="d-flex align-items-center small text-muted">
+                                                <span class="badge bg-light text-dark border me-2">{{ $doc->category }}</span>
+                                                <span><i class="bi bi-calendar3 me-1"></i> {{ $doc->created_at->format('d M Y') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                         @if($documents->count() >= 8)
+                            <div class="text-center mt-3">
+                                <a href="{{ route('documents.public', ['q' => $keyword]) }}" class="btn btn-outline-warning text-dark rounded-pill btn-sm">Lihat Semua Dokumen <i class="bi bi-arrow-right ms-1"></i></a>
+                            </div>
+                         @endif
+                    </div>
+                    @endif
                 @endif
 
             </div>
@@ -163,6 +217,18 @@
     .ls-1 { letter-spacing: 1px; }
     .backdrop-blur { backdrop-filter: blur(5px); }
     .text-truncate-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* SEARCH BAR PREMIUM */
+    .search-group {
+        border-radius: 50px; overflow: hidden; padding: 5px;
+        background: rgba(255, 255, 255, 0.95);
+        transition: all 0.3s ease;
+    }
+    .search-group:hover { box-shadow: 0 15px 40px rgba(0,0,0,0.1) !important; transform: translateY(-2px); }
+    .search-group input:focus { box-shadow: none; background: transparent; }
+    .search-group .btn-primary {
+        border-radius: 50px; background: linear-gradient(45deg, #2563eb, #1d4ed8); border: none;
+    }
 </style>
 
 @endsection

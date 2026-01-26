@@ -16,7 +16,20 @@ use Carbon\Carbon; // Pastikan Carbon sudah di-import
 class ReportController extends Controller
 {
     // Fungsi pembantu untuk setting kertas A4
+    // Fungsi pembantu untuk setting kertas A4
     private function generatePdf($view, $data, $filename) {
+        // AMBIL SETTING LAPORAN
+        $reportSettings = Setting::whereIn('key', [
+            'report_header_address',
+            'report_signer_name',
+            'report_signer_nip',
+            'report_signer_rank',
+            'report_signer_position'
+        ])->pluck('value', 'key')->toArray();
+
+        // GABUNGKAN DATA
+        $data = array_merge($data, ['reportSettings' => $reportSettings]);
+
         $pdf = Pdf::loadView($view, $data);
         $pdf->setPaper('a4', 'portrait');
         return $pdf->stream($filename . '.pdf');

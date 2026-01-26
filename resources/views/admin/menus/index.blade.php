@@ -56,6 +56,7 @@
                                 <optgroup label="Halaman Utama">
                                     <option value="/">Beranda (Home)</option>
                                     <option value="{{ route('news.index') }}">Berita & Artikel</option>
+                                    <option value="{{ route('gallery.public') }}">Galeri Multimedia</option>
                                     <option value="/page/kontak">Kontak Kami</option>
                                 </optgroup>
 

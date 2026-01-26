@@ -37,6 +37,14 @@ class SettingController extends Controller
             'footer_phone'         => 'nullable|string',
             'footer_hours_weekday' => 'nullable|string',
             'footer_hours_friday'  => 'nullable|string',
+            'contact_google_maps_link' => 'nullable|string',
+
+            // Validasi Laporan PDF
+            'report_header_address'  => 'nullable|string',
+            'report_signer_name'     => 'nullable|string',
+            'report_signer_nip'      => 'nullable|string',
+            'report_signer_rank'     => 'nullable|string',
+            'report_signer_position' => 'nullable|string',
 
             // Validasi Sosial Media
             'social_facebook'  => 'nullable|url',
@@ -100,8 +108,31 @@ class SettingController extends Controller
             'social_facebook',
             'social_instagram',
             'social_twitter',
-            'social_youtube'
+            'social_twitter',
+            'social_youtube',
+            'social_twitter',
+            'social_youtube',
+            'contact_google_maps_link',
+            
+            // Setting Laporan
+            'report_header_address',
+            'report_signer_name',
+            'report_signer_nip',
+            'report_signer_rank',
+            'report_signer_position'
         ];
+
+        // LOGIKA KHUSUS: Jika user paste <iframe> map, ambil src-nya saja
+        if ($request->filled('contact_google_maps_link')) {
+            $mapInput = $request->input('contact_google_maps_link');
+            if (str_contains($mapInput, '<iframe') && str_contains($mapInput, 'src="')) {
+                // Ambil URL di dalam src="..."
+                preg_match('/src="([^"]+)"/', $mapInput, $match);
+                if (isset($match[1])) {
+                    $request->merge(['contact_google_maps_link' => $match[1]]);
+                }
+            }
+        }
 
         foreach ($textSettings as $key) {
             // Update atau Create jika belum ada

@@ -70,7 +70,7 @@
                             </div>
                         </td>
                         <td>
-                            @if($user->role == 'super')
+                            @if($user->role == 'super_admin')
                                 <span class="badge bg-primary bg-opacity-10 text-primary border border-primary small rounded-pill px-3 py-1 fw-bold" style="font-size: 0.65rem;">SUPER ADMIN</span>
                             @else
                                 <span class="badge bg-info bg-opacity-10 text-info border border-info small rounded-pill px-3 py-1 fw-bold" style="font-size: 0.65rem;">ADMIN</span>
@@ -169,7 +169,7 @@
                         <label class="form-label fw-bold small text-muted text-uppercase ls-1">Role / Hak Akses</label>
                         <select name="role" class="form-select bg-light border-0 py-2 shadow-none">
                             <option value="admin">Admin Biasa (Operator)</option>
-                            <option value="super">Super Admin (Administrator)</option>
+                            <option value="super_admin">Super Admin (Administrator)</option>
                         </select>
                     </div>
                 </div>

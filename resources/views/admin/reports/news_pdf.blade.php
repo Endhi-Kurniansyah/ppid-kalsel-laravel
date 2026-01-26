@@ -104,7 +104,7 @@
             <td class="text-cell">
                 <h1>PEMERINTAH PROVINSI KALIMANTAN SELATAN</h1>
                 <h2>DINAS KOMUNIKASI DAN INFORMATIKA</h2>
-                <p>Jalan Dharma Praja II No. 1 Komplek Perkantoran Pemerintah Provinsi, Banjarbaru</p>
+                <p>{{ $reportSettings['report_header_address'] ?? 'Jalan Dharma Praja II Kawasan Perkantoran Pemerintah Provinsi Kalimantan Selatan. Banjarbaru Kode Pos 70732' }}</p>
                 <p>Laman: dinkominfo.kalselprov.go.id | Email: ppid@kalselprov.go.id</p>
             </td>
         </tr>
@@ -159,11 +159,11 @@
     <div class="ttd-box">
         {{-- Tanggal Otomatis (Format Indonesia) --}}
         <p>Banjarbaru, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
-        <p>Pejabat Pengelola PPID,</p>
+        <p>{{ $reportSettings['report_signer_position'] ?? 'Pejabat Pengelola PPID' }},</p>
 
-        <div class="ttd-nama">Dr. H. MUHAMAD MUSLIM, S.Pd., M.Kes.</div>
-        <p>Pembina Utama Muda</p>
-        <p>NIP. 19680314 199003 1 010</p>
+        <div class="ttd-nama">{{ $reportSettings['report_signer_name'] ?? 'Dr. H. MUHAMAD MUSLIM, S.Pd., M.Kes.' }}</div>
+        <p>{{ $reportSettings['report_signer_rank'] ?? 'Pembina Utama Muda' }}</p>
+        <p>NIP. {{ $reportSettings['report_signer_nip'] ?? '19680314 199003 1 010' }}</p>
     </div>
 
 </body>

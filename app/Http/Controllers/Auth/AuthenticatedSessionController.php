@@ -12,28 +12,21 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
     public function create(): View
     {
         return view('auth.login');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**
-     * Destroy an authenticated session.
+     * LOGOUT FUNCTION
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -43,6 +36,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // PAKSA: Arahkan ke login dengan pesan sukses
+        return redirect()->route('login')->with('status', 'Sesi Anda telah berakhir. Silakan login kembali.');
     }
 }
