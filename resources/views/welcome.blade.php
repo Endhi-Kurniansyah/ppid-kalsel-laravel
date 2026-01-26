@@ -119,9 +119,8 @@
                 </a>
             </div>
 
-            {{-- Kartu 4: DIP --}}
             <div class="col-md-6 col-lg-3">
-                <a href="{{ route('documents.public', 'daftar-infomasi-publik') }}" class="card-feature text-decoration-none h-100">
+                <a href="{{ route('documents.dip') }}" class="card-feature text-decoration-none h-100">
                     <div class="card border-0 shadow-sm h-100 text-center py-4 px-3">
                         <div class="icon-box bg-danger bg-opacity-10 text-danger">
                             <i class="bi bi-collection"></i>
