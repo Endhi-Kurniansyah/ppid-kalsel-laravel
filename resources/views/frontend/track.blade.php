@@ -149,14 +149,14 @@
 
                     {{-- KARTU KEBERATAN (JIKA ADA) --}}
                     @if($result->objection)
-                        <div class="card border-0 shadow-lg rounded-4 mt-4 overflow-hidden border-start border-5 border-danger animate-fade-up delay-100">
+                        <div class="card border-0 shadow-lg rounded-4 mt-4 overflow-hidden animate-fade-up delay-100">
                             <div class="card-body p-4">
                                 <div class="d-flex align-items-center mb-4">
                                     <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-circle me-3">
                                         <i class="bi bi-shield-exclamation fs-3"></i>
                                     </div>
                                     <div>
-                                        <h5 class="fw-bold text-danger mb-0">Pengajuan Keberatan</h5>
+                                        <h5 class="fw-bold text-dark mb-0">Pengajuan Keberatan</h5>
                                         <small class="text-muted">Kode Keberatan: <strong>{{ $result->objection->objection_code }}</strong></small>
                                     </div>
                                     <div class="ms-auto">
@@ -178,9 +178,15 @@
                                 </div>
 
                                 @if($result->objection->admin_note)
-                                    <div class="alert alert-danger bg-opacity-10 border-danger border-opacity-25 mb-0 rounded-3">
-                                        <small class="fw-bold text-danger d-block mb-1 text-uppercase"><i class="bi bi-gavel me-1"></i> Keputusan Atasan PPID</small>
-                                        <p class="mb-0 text-dark">{{ $result->objection->admin_note }}</p>
+                                    <div class="alert alert-light border border-danger border-opacity-25 mb-0 rounded-3 shadow-sm">
+                                        <small class="fw-bold text-danger d-block mb-2 text-uppercase"><i class="bi bi-gavel me-1"></i> Keputusan Atasan PPID</small>
+                                        <p class="mb-2 text-dark">{{ $result->objection->admin_note }}</p>
+
+                                        @if($result->objection->response_file)
+                                            <a href="{{ asset('storage/' . $result->objection->response_file) }}" class="btn btn-dark btn-sm rounded-pill mt-2 shadow-sm" target="_blank">
+                                                <i class="bi bi-paperclip me-1"></i> Download Surat Tanggapan
+                                            </a>
+                                        @endif
                                     </div>
                                 @else
                                     <div class="text-muted small fst-italic d-flex align-items-center">

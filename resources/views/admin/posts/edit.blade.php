@@ -78,9 +78,9 @@
                         {{-- Gambar Utama --}}
                         <div class="mb-4">
                             <label class="form-label fw-bold small text-muted text-uppercase">Gambar Utama (Thumbnail)</label>
-                            <div class="p-4 bg-light rounded-4 border border-dashed text-center mb-3">
-                                <i class="bi bi-cloud-arrow-up-fill fs-1 text-primary opacity-25 mb-2 d-block"></i>
-                                <input type="file" name="image" class="form-control form-control-sm bg-white shadow-none" accept="image/*">
+                            <input type="file" name="image" class="form-control border-0 bg-light shadow-none" accept="image/*">
+                            <div class="form-text mt-2 text-muted" style="font-size: 0.7rem;">
+                                <i class="bi bi-info-circle me-1"></i> Biarkan kosong jika tidak ingin mengganti gambar.
                             </div>
 
                             @if($post->image)
@@ -89,9 +89,6 @@
                                     <img src="{{ asset('storage/' . $post->image) }}" class="rounded img-fluid border" style="max-height: 180px; object-fit: cover;">
                                 </div>
                             @endif
-                            <small class="text-muted d-block mt-2 text-center" style="font-size: 0.7rem;">
-                                *Biarkan kosong jika tidak ingin mengganti gambar.
-                            </small>
                         </div>
 
                         <hr class="my-4 opacity-10">

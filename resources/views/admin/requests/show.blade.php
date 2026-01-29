@@ -100,7 +100,7 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden mb-4">
                 <div class="card-header bg-white py-3 px-4 border-bottom text-primary fw-bold">
-                    <i class="bi bi-pencil-square me-2"></i>Tindakan Admin
+                    <i class="bi bi-check2-circle me-2"></i>Keputusan / Tindak Lanjut
                 </div>
                 <div class="card-body p-4">
                     <form action="{{ route('admin.requests.update', $req->id) }}" method="POST" enctype="multipart/form-data">
@@ -109,37 +109,46 @@
 
                         {{-- Update Status --}}
                         <div class="mb-4">
-                            <label class="form-label fw-bold small text-muted text-uppercase ls-1">Update Status</label>
+                            <label class="form-label fw-bold small text-muted text-uppercase ls-1">Pilih Status Keputusan</label>
                             <select name="status" class="form-select border-0 bg-light shadow-none py-2 rounded-3 fw-medium" required>
                                 <option value="pending" {{ $req->status == 'pending' ? 'selected' : '' }}>Menunggu (Pending)</option>
                                 <option value="processed" {{ $req->status == 'processed' ? 'selected' : '' }}>Sedang Diproses</option>
-                                <option value="finished" {{ $req->status == 'finished' ? 'selected' : '' }}>Selesai (Diterima)</option>
-                                <option value="rejected" {{ $req->status == 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                                <option value="finished" {{ $req->status == 'finished' ? 'selected' : '' }}>Permohonan Diterima (Selesai)</option>
+                                <option value="rejected" {{ $req->status == 'rejected' ? 'selected' : '' }}>Permohonan Ditolak</option>
                             </select>
                         </div>
 
                         {{-- Catatan --}}
                         <div class="mb-4">
-                            <label class="form-label fw-bold small text-muted text-uppercase ls-1">Catatan / Balasan</label>
+                            <label class="form-label fw-bold small text-muted text-uppercase ls-1">Tanggapan Resmi (Admin Note)</label>
                             <textarea name="admin_note" class="form-control border-0 bg-light shadow-none py-2 px-3" rows="6"
-                                      placeholder="Tulis balasan resmi atau alasan penolakan..." required>{{ $req->admin_note }}</textarea>
+                                      placeholder="Ketikkan alasan atau instruksi lanjutan di sini..." required>{{ $req->admin_note }}</textarea>
+                            <div class="form-text mt-2 text-muted" style="font-size: 0.7rem;">
+                                <i class="bi bi-info-circle me-1"></i> Tanggapan ini akan dapat dilihat oleh pemohon pada cek status.
+                            </div>
                         </div>
 
                         {{-- Lampiran Balasan --}}
                         <div class="mb-4">
-                            <label class="form-label fw-bold small text-muted text-uppercase ls-1">Berkas Balasan (Opsional)</label>
-                            <div class="p-4 bg-light rounded-4 border border-dashed text-center">
-                                <i class="bi bi-file-earmark-arrow-up fs-1 text-primary opacity-25 mb-3 d-block"></i>
-                                <input type="file" name="reply_file" class="form-control form-control-sm bg-white shadow-none">
-                                <small class="text-muted mt-2 d-block" style="font-size: 0.65rem;">PDF atau Dokumen pendukung.</small>
+                            <label class="form-label fw-bold small text-muted text-uppercase ls-1">Upload Surat Tanggapan (Opsional)</label>
+                            <input type="file" name="reply_file" class="form-control border-0 bg-light shadow-none" accept=".pdf,.jpg,.jpeg,.png">
+                            <div class="form-text mt-2 text-muted" style="font-size: 0.7rem;">
+                                <i class="bi bi-file-earmark-pdf me-1"></i> PDF atau Dokumen pendukung.
                             </div>
+
+                            @if($req->reply_file)
+                                <div class="mt-2 p-2 bg-light border rounded d-flex align-items-center">
+                                    <i class="bi bi-paperclip me-2 text-primary"></i>
+                                    <span class="small text-dark me-auto">File terupload: <a href="{{ asset('storage/' . $req->reply_file) }}" target="_blank" class="fw-bold text-decoration-none">Lihat File</a></span>
+                                </div>
+                            @endif
                         </div>
 
                         <hr class="my-4 opacity-10">
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary fw-bold rounded-pill shadow-sm py-2 px-4 hover-scale">
-                                <i class="bi bi-check-circle-fill me-2"></i> Simpan & Update
+                                <i class="bi bi-send-fill me-2"></i> Simpan & Kirim Keputusan
                             </button>
                             <a href="{{ route('admin.requests.index') }}" class="btn btn-light border rounded-pill fw-bold py-2 text-muted">
                                 Batalkan

@@ -85,10 +85,9 @@
                         {{-- Ganti Berkas --}}
                         <div class="mb-4">
                             <label class="form-label fw-bold small text-muted text-uppercase">Ganti Berkas (PDF)</label>
-                            <div class="p-4 bg-light rounded-4 border border-dashed text-center">
-                                <i class="bi bi-file-earmark-check-fill fs-1 text-primary opacity-25 mb-3 d-block"></i>
-                                <input type="file" name="file_path" class="form-control form-control-sm bg-white shadow-none @error('file_path') is-invalid @enderror" accept=".pdf">
-                                <small class="text-muted mt-2 d-block" style="font-size: 0.65rem;">*Biarkan kosong jika tidak ingin mengganti file.</small>
+                            <input type="file" name="file_path" class="form-control border-0 bg-light shadow-none @error('file_path') is-invalid @enderror" accept=".pdf">
+                            <div class="form-text mt-2 text-muted" style="font-size: 0.7rem;">
+                                <i class="bi bi-info-circle me-1"></i> Biarkan kosong jika tidak ingin mengganti file.
                             </div>
                             @error('file_path') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                         </div>

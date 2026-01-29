@@ -141,12 +141,26 @@ class ObjectionController extends Controller
         $request->validate([
             'status' => 'required',
             'admin_note' => 'required',
+            'response_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120', // Max 5MB
         ]);
 
-        $objection->update([
+        $data = [
             'status' => $request->status,
             'admin_note' => $request->admin_note
-        ]);
+        ];
+
+        // Handle File Upload
+        if ($request->hasFile('response_file')) {
+            // Delete old file if exists
+            if ($objection->response_file && \Illuminate\Support\Facades\Storage::exists('public/' . $objection->response_file)) {
+                \Illuminate\Support\Facades\Storage::delete('public/' . $objection->response_file);
+            }
+
+            $path = $request->file('response_file')->store('responses', 'public');
+            $data['response_file'] = $path;
+        }
+
+        $objection->update($data);
 
         return redirect()->route('admin.objections.index')->with('success', 'Tanggapan keberatan berhasil disimpan!');
     }

@@ -15,7 +15,8 @@ class Objection extends Model
         'reason',
         'description',
         'status',
-        'admin_note'
+        'admin_note',
+        'response_file'
     ];
 
     // Relasi: Setiap keberatan pasti punya 1 data permohonan asal

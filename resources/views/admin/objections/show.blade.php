@@ -75,7 +75,7 @@
                     <i class="bi bi-check2-circle me-2"></i>Keputusan Atasan PPID
                 </div>
                 <div class="card-body p-4">
-                    <form action="{{ route('admin.objections.update', $objection->id) }}" method="POST">
+                    <form action="{{ route('admin.objections.update', $objection->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -91,11 +91,27 @@
 
                         <div class="mb-4">
                             <label class="form-label fw-bold small text-muted text-uppercase ls-1">Tanggapan Resmi (Admin Note)</label>
-                            <textarea name="admin_note" class="form-control border-0 bg-light shadow-none py-2 px-3" rows="8"
+                            <textarea name="admin_note" class="form-control border-0 bg-light shadow-none py-2 px-3" rows="6"
                                       placeholder="Ketikkan alasan atau instruksi lanjutan di sini..." required>{{ $objection->admin_note }}</textarea>
                             <div class="form-text mt-2 text-muted" style="font-size: 0.7rem;">
-                                <i class="bi bi-info-circle me-1"></i> Tanggapan ini akan dapat dilihat oleh pemohon pada cek status.
+                                <i class="bi bi-info-circle me-1"></i> Tanggapan ini akan dapati dilihat oleh pemohon pada cek status.
                             </div>
+                        </div>
+
+                        {{-- FILE UPLOAD --}}
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-muted text-uppercase ls-1">Upload Surat Tanggapan (Opsional)</label>
+                            <input type="file" name="response_file" class="form-control border-0 bg-light shadow-none" accept=".pdf,.jpg,.jpeg,.png">
+                            <div class="form-text mt-2 text-muted" style="font-size: 0.7rem;">
+                                <i class="bi bi-file-earmark-pdf me-1"></i> PDF atau Gambar (Max: 5MB).
+                            </div>
+                            
+                            @if($objection->response_file)
+                                <div class="mt-2 p-2 bg-light border rounded d-flex align-items-center">
+                                    <i class="bi bi-paperclip me-2 text-primary"></i>
+                                    <span class="small text-dark me-auto">File terupload: <a href="{{ asset('storage/' . $objection->response_file) }}" target="_blank" class="fw-bold">Lihat File</a></span>
+                                </div>
+                            @endif
                         </div>
 
                         <hr class="my-4 opacity-10">

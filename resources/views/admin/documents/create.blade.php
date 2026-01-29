@@ -85,10 +85,9 @@
                         {{-- File Upload --}}
                         <div class="mb-4">
                             <label class="form-label fw-bold small text-muted text-uppercase">Berkas Dokumen (PDF)</label>
-                            <div class="p-4 bg-light rounded-4 border border-dashed text-center">
-                                <i class="bi bi-file-pdf-fill fs-1 text-danger opacity-25 mb-3 d-block"></i>
-                                <input type="file" name="file_path" class="form-control form-control-sm bg-white shadow-none @error('file_path') is-invalid @enderror" accept=".pdf" required>
-                                <small class="text-muted mt-2 d-block" style="font-size: 0.65rem;">Hanya file PDF. Ukuran maksimal: 10MB.</small>
+                            <input type="file" name="file_path" class="form-control border-0 bg-light shadow-none @error('file_path') is-invalid @enderror" accept=".pdf" required>
+                            <div class="form-text mt-2 text-muted" style="font-size: 0.7rem;">
+                                <i class="bi bi-file-earmark-pdf me-1"></i> Hanya file PDF. Ukuran maksimal: 10MB.
                             </div>
                             @error('file_path') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                         </div>
@@ -98,7 +97,7 @@
                         {{-- TOMBOL AKSI --}}
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary fw-bold rounded-pill shadow-sm py-2 px-4 hover-scale">
-                                <i class="bi bi-cloud-arrow-up-fill me-2"></i> Simpan & Publikasi
+                                <i class="bi bi-send-fill me-2"></i> Simpan & Publikasi
                             </button>
                             <a href="{{ route('documents.index') }}" class="btn btn-light border rounded-pill fw-bold py-2 text-muted">
                                 Batal

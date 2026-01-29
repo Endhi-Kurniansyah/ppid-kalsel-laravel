@@ -78,13 +78,10 @@
                         {{-- Gambar Utama --}}
                         <div class="mb-4">
                             <label class="form-label fw-bold small text-muted text-uppercase">Gambar Utama (Thumbnail)</label>
-                            <div class="p-4 bg-light rounded-4 border border-dashed text-center mb-3">
-                                <i class="bi bi-cloud-arrow-up-fill fs-1 text-primary opacity-25 mb-2 d-block"></i>
-                                <input type="file" name="image" class="form-control form-control-sm bg-white shadow-none" accept="image/*">
+                            <input type="file" name="image" class="form-control border-0 bg-light shadow-none" accept="image/*">
+                            <div class="form-text mt-2 text-muted" style="font-size: 0.7rem;">
+                                <i class="bi bi-image me-1"></i> Rekomendasi ukuran 1200x800px (Max 2MB).
                             </div>
-                            <small class="text-muted d-block mt-2 text-center" style="font-size: 0.7rem;">
-                                Rekomendasi ukuran 1200x800px (Max 2MB).
-                            </small>
                         </div>
 
                         <hr class="my-4 opacity-10">
@@ -92,7 +89,7 @@
                         {{-- Tombol Aksi --}}
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary fw-bold rounded-pill shadow-sm py-2 px-4 hover-scale">
-                                <i class="bi bi-cloud-arrow-up-fill me-2"></i> Terbitkan Sekarang
+                                <i class="bi bi-send-fill me-2"></i> Terbitkan Sekarang
                             </button>
                             <a href="{{ route('posts.index') }}" class="btn btn-light border rounded-pill fw-bold py-2 text-muted">
                                 Batal
