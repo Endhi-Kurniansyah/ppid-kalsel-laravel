@@ -18,15 +18,37 @@
         <div class="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center">
             {{-- FORM FILTER (COMPACT) --}}
             <form action="{{ route('posts.index') }}" method="GET" class="d-flex gap-1">
-                <select name="month" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white" style="width: 110px; border-radius: 20px; font-size: 0.75rem;">
+                {{-- Search Input --}}
+                <input type="text" name="q" class="form-control form-control-sm shadow-sm border-0 bg-white" 
+                       placeholder="Cari judul..." value="{{ request('q') }}" 
+                       style="width: 130px; border-radius: 20px; font-size: 0.75rem;">
+
+                {{-- Category Filter --}}
+                <select name="category" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white" style="width: 120px; border-radius: 20px; font-size: 0.75rem;">
+                    <option value="">Kategori</option>
+                    @foreach($categories as $cat)
+                        <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                    @endforeach
+                </select>
+
+                {{-- Sort Filter --}}
+                <select name="sort" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white" style="width: 110px; border-radius: 20px; font-size: 0.75rem;">
+                    <option value="terbaru" {{ request('sort', 'terbaru') == 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+                    <option value="terlama" {{ request('sort') == 'terlama' ? 'selected' : '' }}>Terlama</option>
+                    <option value="terpopuler" {{ request('sort') == 'terpopuler' ? 'selected' : '' }}>Terpopuler</option>
+                </select>
+
+                {{-- Month Filter --}}
+                <select name="month" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white" style="width: 90px; border-radius: 20px; font-size: 0.75rem;">
                     <option value="">Bulan</option>
                     @foreach(range(1, 12) as $m)
                         <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }}>
-                            {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                            {{ DateTime::createFromFormat('!m', $m)->format('M') }}
                         </option>
                     @endforeach
                 </select>
 
+                {{-- Year Filter --}}
                 <select name="year" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white text-center" style="width: 80px; border-radius: 20px; font-size: 0.75rem;">
                     <option value="">Tahun</option>
                     @foreach(range(date('Y'), 2020) as $y)

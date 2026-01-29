@@ -1,107 +1,110 @@
 @extends('layouts.admin')
 
 @section('content')
-{{-- Scroll Normal --}}
-<div class="container-fluid p-4" style="background-color: #f8fafc; min-height: 100vh;">
+{{-- FIXED LAYOUT (Non-Scrollable Page) --}}
+<div class="container-fluid d-flex flex-column h-100 p-4" style="background-color: #f8fafc; overflow: hidden;">
 
     {{-- 1. HEADER HALAMAN --}}
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-3 border-bottom border-secondary border-opacity-10">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-3 border-bottom border-secondary border-opacity-10 flex-shrink-0">
         <div>
             <h4 class="fw-bold text-dark mb-1">Pengaturan Profil</h4>
             <p class="text-muted small mb-0">Kelola informasi identitas akun dan keamanan kata sandi Anda.</p>
         </div>
     </div>
 
-    <div class="row g-4">
-        {{-- CARD 1: INFORMASI PROFIL --}}
-        <div class="col-12 col-lg-6">
-            <div class="card border border-light shadow-none rounded-4 bg-white overflow-hidden h-100">
-                <div class="card-header bg-white py-3 px-4 border-bottom">
-                    <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-person-circle me-2 text-primary"></i>Informasi Akun</h6>
-                </div>
-                <div class="card-body p-4">
-                    <form method="post" action="{{ route('profile.update') }}">
-                        @csrf
-                        @method('patch')
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Nama Lengkap</label>
-                            <input type="text" name="name" class="form-control bg-light border-0 py-2 shadow-none fw-bold" value="{{ old('name', $user->name) }}" required>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Alamat Email</label>
-                            <input type="email" name="email" class="form-control bg-light border-0 py-2 shadow-none" value="{{ old('email', $user->email) }}" required>
-                        </div>
-
-                        <div class="d-flex align-items-center gap-3">
-                            <button type="submit" class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-none hover-scale">
-                                <i class="bi bi-check-circle me-2"></i>Simpan Perubahan
-                            </button>
-                            @if (session('status') === 'profile-updated')
-                                <span class="text-success small fw-bold animate__animated animate__fadeIn"><i class="bi bi-check-all"></i> Tersimpan</span>
-                            @endif
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        {{-- CARD 2: GANTI PASSWORD --}}
-        <div class="col-12 col-lg-6">
-            <div class="card border border-light shadow-none rounded-4 bg-white overflow-hidden h-100">
-                <div class="card-header bg-white py-3 px-4 border-bottom">
-                    <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-shield-lock-fill me-2 text-warning"></i>Perbarui Keamanan</h6>
-                </div>
-                <div class="card-body p-4">
-                    <form method="post" action="{{ route('password.update') }}">
-                        @csrf
-                        @method('put')
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Password Saat Ini</label>
-                            <input type="password" name="current_password" class="form-control bg-light border-0 py-2 shadow-none">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Password Baru</label>
-                            <input type="password" name="password" class="form-control bg-light border-0 py-2 shadow-none">
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label small fw-bold text-muted text-uppercase ls-1">Konfirmasi Password</label>
-                            <input type="password" name="password_confirmation" class="form-control bg-light border-0 py-2 shadow-none">
-                        </div>
-
-                        <div class="d-flex align-items-center gap-3">
-                            <button type="submit" class="btn btn-warning px-4 py-2 fw-bold rounded-pill shadow-none text-dark hover-scale">
-                                <i class="bi bi-key-fill me-2"></i>Update Password
-                            </button>
-                            @if (session('status') === 'password-updated')
-                                <span class="text-success small fw-bold animate__animated animate__fadeIn"><i class="bi bi-check-all"></i> Berhasil Diganti</span>
-                            @endif
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        {{-- CARD 3: HAPUS AKUN (FOOTER) --}}
-        <div class="col-12">
-            <div class="card border border-light shadow-none rounded-4 bg-white overflow-hidden">
-                <div class="card-body p-4 d-flex flex-column flex-md-row justify-content-between align-items-center">
-                    <div class="d-flex align-items-center mb-3 mb-md-0">
-                        <div class="p-3 bg-danger bg-opacity-10 rounded-circle me-3 text-danger">
-                            <i class="bi bi-exclamation-triangle-fill fs-4"></i>
-                        </div>
-                        <div>
-                            <h6 class="fw-bold text-danger mb-1">Zona Bahaya: Hapus Akun</h6>
-                            <p class="text-muted small mb-0">Hapus akun secara permanen jika sudah tidak digunakan kembali. Data tidak dapat dipulihkan.</p>
-                        </div>
+    {{-- 2. SCROLLABLE CONTENT AREA --}}
+    <div class="flex-grow-1 overflow-auto custom-scrollbar pb-4">
+        <div class="row g-4">
+            {{-- CARD 1: INFORMASI PROFIL --}}
+            <div class="col-12 col-lg-6">
+                <div class="card border border-light shadow-none rounded-4 bg-white overflow-hidden h-100">
+                    <div class="card-header bg-white py-3 px-4 border-bottom">
+                        <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-person-circle me-2 text-primary"></i>Informasi Akun</h6>
                     </div>
-                    <button class="btn btn-outline-danger px-4 py-2 fw-bold rounded-pill hover-scale" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-                        <i class="bi bi-trash3 me-2"></i>Hapus Akun Sekarang
-                    </button>
+                    <div class="card-body p-4">
+                        <form method="post" action="{{ route('profile.update') }}">
+                            @csrf
+                            @method('patch')
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted text-uppercase ls-1">Nama Lengkap</label>
+                                <input type="text" name="name" class="form-control bg-light border-0 py-2 shadow-none fw-bold" value="{{ old('name', $user->name) }}" required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold text-muted text-uppercase ls-1">Alamat Email</label>
+                                <input type="email" name="email" class="form-control bg-light border-0 py-2 shadow-none" value="{{ old('email', $user->email) }}" required>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-3">
+                                <button type="submit" class="btn btn-primary px-4 py-2 fw-bold rounded-pill shadow-none hover-scale">
+                                    <i class="bi bi-check-circle me-2"></i>Simpan Perubahan
+                                </button>
+                                @if (session('status') === 'profile-updated')
+                                    <span class="text-success small fw-bold animate__animated animate__fadeIn"><i class="bi bi-check-all"></i> Tersimpan</span>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {{-- CARD 2: GANTI PASSWORD --}}
+            <div class="col-12 col-lg-6">
+                <div class="card border border-light shadow-none rounded-4 bg-white overflow-hidden h-100">
+                    <div class="card-header bg-white py-3 px-4 border-bottom">
+                        <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-shield-lock-fill me-2 text-warning"></i>Perbarui Keamanan</h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" action="{{ route('password.update') }}">
+                            @csrf
+                            @method('put')
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted text-uppercase ls-1">Password Saat Ini</label>
+                                <input type="password" name="current_password" class="form-control bg-light border-0 py-2 shadow-none">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted text-uppercase ls-1">Password Baru</label>
+                                <input type="password" name="password" class="form-control bg-light border-0 py-2 shadow-none">
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold text-muted text-uppercase ls-1">Konfirmasi Password</label>
+                                <input type="password" name="password_confirmation" class="form-control bg-light border-0 py-2 shadow-none">
+                            </div>
+
+                            <div class="d-flex align-items-center gap-3">
+                                <button type="submit" class="btn btn-warning px-4 py-2 fw-bold rounded-pill shadow-none text-dark hover-scale">
+                                    <i class="bi bi-key-fill me-2"></i>Update Password
+                                </button>
+                                @if (session('status') === 'password-updated')
+                                    <span class="text-success small fw-bold animate__animated animate__fadeIn"><i class="bi bi-check-all"></i> Berhasil Diganti</span>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {{-- CARD 3: HAPUS AKUN (FOOTER) --}}
+            <div class="col-12">
+                <div class="card border border-light shadow-none rounded-4 bg-white overflow-hidden">
+                    <div class="card-body p-4 d-flex flex-column flex-md-row justify-content-between align-items-center">
+                        <div class="d-flex align-items-center mb-3 mb-md-0">
+                            <div class="p-3 bg-danger bg-opacity-10 rounded-circle me-3 text-danger">
+                                <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-danger mb-1">Zona Bahaya: Hapus Akun</h6>
+                                <p class="text-muted small mb-0">Hapus akun secara permanen jika sudah tidak digunakan kembali. Data tidak dapat dipulihkan.</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-danger px-4 py-2 fw-bold rounded-pill hover-scale" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                            <i class="bi bi-trash3 me-2"></i>Hapus Akun Sekarang
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,7 +138,14 @@
 </div>
 
 <style>
-    body { background-color: #f8fafc; overflow-y: auto !important; }
+    /* Fixed Layout Styles */
+    html, body { height: 100%; overflow: hidden !important; background-color: #f8fafc; }
+    footer { display: none !important; }
+
+    /* Hide Scrollbar */
+    .overflow-auto::-webkit-scrollbar { display: none; }
+    .overflow-auto { -ms-overflow-style: none; scrollbar-width: none; }
+
     .ls-1 { letter-spacing: 0.5px; }
     .hover-scale { transition: transform 0.2s ease; }
     .hover-scale:hover { transform: translateY(-2px); }

@@ -54,10 +54,52 @@
 
                     {{-- Judul Tabel Kecil --}}
                     <div class="card-header bg-white py-4 px-4 border-bottom">
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                             <h5 class="fw-bold text-dark mb-0"><i class="bi bi-list-columns-reverse me-2 text-primary"></i> Indeks Dokumen</h5>
-                            {{-- Total Dokumen Tetap Ada di Kanan Atas (Opsional) --}}
-                            <small class="text-muted fw-bold">Total: {{ $groupedDocuments->flatten()->count() }} Dokumen</small>
+                            
+                            {{-- Filter dan Total --}}
+                            <div class="d-flex align-items-center gap-3">
+                                {{-- Filter Form --}}
+                                <form action="{{ route('documents.dip') }}" method="GET" class="d-flex align-items-center gap-2">
+                                    @php
+                                        $months = [
+                                            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+                                            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 
+                                            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+                                        ];
+                                    @endphp
+                                    
+                                    {{-- Month --}}
+                                    <select name="month" class="form-select form-select-sm border rounded-pill px-3 bg-light fw-medium" style="width: 140px;">
+                                        <option value="">Bulan</option>
+                                        @foreach($months as $num => $name)
+                                            <option value="{{ $num }}" {{ request('month') == $num ? 'selected' : '' }}>{{ $name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    {{-- Year --}}
+                                    <select name="year" class="form-select form-select-sm border rounded-pill px-3 bg-light fw-medium" style="width: 130px;">
+                                        <option value="">Tahun</option>
+                                        @foreach(range(date('Y'), 2020) as $y)
+                                            <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    {{-- Buttons --}}
+                                    <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold shadow-sm hover-scale">
+                                        <i class="bi bi-funnel-fill me-1"></i> Filter
+                                    </button>
+
+                                    @if(request()->filled('year') || request()->filled('month'))
+                                        <a href="{{ route('documents.dip') }}" class="btn btn-sm btn-light border rounded-pill px-2 text-muted hover-scale" title="Reset Filter">
+                                            <i class="bi bi-x-lg"></i>
+                                        </a>
+                                    @endif
+                                </form>
+                                
+                                {{-- Total Dokumen --}}
+                                <small class="text-muted fw-bold">Total: {{ $groupedDocuments->flatten()->count() }} Dokumen</small>
+                            </div>
                         </div>
                     </div>
 

@@ -16,7 +16,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         // Mulai Query
-        $query = Post::with('category', 'user')->latest();
+        $query = Post::with('category', 'user');
 
         // Filter Bulan
         if ($request->filled('month')) {
@@ -28,11 +28,38 @@ class PostController extends Controller
             $query->whereYear('created_at', $request->year);
         }
 
-        // Ambil Data
-        // Saya sarankan pakai paginate(10) biar halaman tidak berat jika beritanya ratusan
-        $posts = $query->paginate(10)->appends($request->all());
+        // Filter Kategori
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
 
-        return view('admin.posts.index', compact('posts'));
+        // Search by Title
+        if ($request->filled('q')) {
+            $query->where('title', 'LIKE', '%' . $request->q . '%');
+        }
+
+        // Sort Options
+        $sort = $request->get('sort', 'terbaru');
+        switch ($sort) {
+            case 'terlama':
+                $query->oldest();
+                break;
+            case 'terpopuler':
+                $query->orderBy('views', 'desc');
+                break;
+            case 'terbaru':
+            default:
+                $query->latest();
+                break;
+        }
+
+        // Ambil Data
+        $posts = $query->paginate(10)->appends($request->all());
+        
+        // Ambil Categories untuk dropdown
+        $categories = Category::where('type', 'news')->get();
+
+        return view('admin.posts.index', compact('posts', 'categories'));
     }
 
     // 2. FORM TAMBAH BERITA

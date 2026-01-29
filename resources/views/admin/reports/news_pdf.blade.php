@@ -105,7 +105,7 @@
                 <h1>PEMERINTAH PROVINSI KALIMANTAN SELATAN</h1>
                 <h2>DINAS KOMUNIKASI DAN INFORMATIKA</h2>
                 <p>{{ $reportSettings['report_header_address'] ?? 'Jalan Dharma Praja II Kawasan Perkantoran Pemerintah Provinsi Kalimantan Selatan. Banjarbaru Kode Pos 70732' }}</p>
-                <p>Laman: dinkominfo.kalselprov.go.id | Email: ppid@kalselprov.go.id</p>
+                <p>Laman: {{ $reportSettings['report_header_website'] ?? 'dinkominfo.kalselprov.go.id' }} | Email: {{ $reportSettings['report_header_email'] ?? 'ppid@kalselprov.go.id' }}</p>
             </td>
         </tr>
     </table>
@@ -120,31 +120,22 @@
         <thead>
             <tr>
                 <th width="5%">NO</th>
-                <th width="15%">TGL TERBIT</th>
-                <th width="40%">JUDUL BERITA / ARTIKEL</th>
+                <th width="45%">JUDUL BERITA</th>
                 <th width="20%">KATEGORI</th>
-                <th width="20%">STATUS</th>
+                <th width="15%">TANGGAL</th>
+                <th width="15%">VIEWS</th>
             </tr>
         </thead>
         <tbody>
             @forelse($posts as $index => $post)
             <tr>
-                <td style="text-align: center;">{{ $index + 1 }}.</td>
+                <td style="text-align: center;">{{ $index + 1 }}</td>
+                <td>{{ $post->title }}</td>
+                <td style="text-align: center;">{{ $post->category->name ?? 'Umum' }}</td>
                 <td style="text-align: center;">
-                    {{ \Carbon\Carbon::parse($post->created_at)->translatedFormat('d/m/Y') }}
+                    {{ \Carbon\Carbon::parse($post->created_at)->translatedFormat('d M Y') }}
                 </td>
-                <td>
-                    <strong>{{ strtoupper($post->title) }}</strong><br>
-                    {{-- Menggunakan $post->user->name sesuai relasi standar Laravel --}}
-                    <span style="font-style: italic; color: #555;">Penulis: {{ $post->user->name ?? 'Admin' }}</span>
-                </td>
-                <td style="text-align: center;">
-                    {{ strtoupper($post->category->name ?? 'UMUM') }}
-                </td>
-                <td style="text-align: center;">
-                    {{-- Cek jika ada kolom status, jika tidak anggap Published --}}
-                    {{ isset($post->status) && $post->status == 'published' ? 'PUBLIK' : 'TAYANG' }}
-                </td>
+                <td style="text-align: center;">{{ number_format($post->views ?? 0) }}</td>
             </tr>
             @empty
             <tr>

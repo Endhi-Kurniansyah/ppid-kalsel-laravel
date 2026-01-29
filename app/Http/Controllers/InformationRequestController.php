@@ -28,7 +28,22 @@ class InformationRequestController extends Controller
             $query->whereYear('created_at', $request->year);
         }
 
-        // 4. Ambil Data (Pakai Paginate)
+        // 4. Filter Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // 5. Search by NIK, Name, or Ticket Number
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function($q) use ($keyword) {
+                $q->where('nik', 'LIKE', "%{$keyword}%")
+                  ->orWhere('name', 'LIKE', "%{$keyword}%")
+                  ->orWhere('ticket_number', 'LIKE', "%{$keyword}%");
+            });
+        }
+
+        // 6. Ambil Data (Pakai Paginate)
         $requests = $query->paginate(10)->appends($request->all());
 
         return view('admin.requests.index', compact('requests'));

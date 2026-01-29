@@ -16,12 +16,31 @@ class DocumentController extends Controller
     public function index(Request $request)
     {
         $query = Document::query();
+        
+        // Filter Bulan
         if ($request->filled('month')) {
             $query->whereMonth('created_at', $request->month);
         }
+        
+        // Filter Tahun
         if ($request->filled('year')) {
             $query->whereYear('created_at', $request->year);
         }
+        
+        // Filter Kategori
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+        
+        // Search by Title/Description
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function($q) use ($keyword) {
+                $q->where('title', 'LIKE', "%{$keyword}%")
+                  ->orWhere('description', 'LIKE', "%{$keyword}%");
+            });
+        }
+        
         $documents = $query->latest()->paginate(10)->appends($request->all());
         return view('admin.documents.index', compact('documents'));
     }
@@ -169,18 +188,28 @@ class DocumentController extends Controller
      */
     public function dipIndex(Request $request)
     {
-        // 1. Ambil SEMUA Dokumen (Urutkan dari yang terbaru), KECUALI kategori 'lainnya'
-        $documents = Document::where('category', '!=', 'lainnya')->latest()->get();
+        // 1. Query dasar: SEMUA Dokumen, KECUALI kategori 'lainnya'
+        $query = Document::where('category', '!=', 'lainnya');
+        
+        // 2. Filter Tahun & Bulan
+        if ($request->filled('year')) {
+            $query->whereYear('created_at', $request->year);
+        }
+        if ($request->filled('month')) {
+            $query->whereMonth('created_at', $request->month);
+        }
+        
+        // 3. Ambil dan urutkan dari yang terbaru
+        $documents = $query->latest()->get();
 
-        // 2. Kelompokkan Dokumen berdasarkan kolom 'category'
-        // Hasilnya akan menjadi array: ['Berkala' => [doc1, doc2], 'Serta Merta' => [doc3], ...]
+        // 4. Kelompokkan Dokumen berdasarkan kolom 'category'
         $groupedDocuments = $documents->groupBy('category');
 
-        // 3. Judul Halaman
+        // 5. Judul Halaman
         $category_title = 'Daftar Informasi Publik (DIP)';
         $category_desc  = 'Rekapitulasi seluruh dokumen publik berdasarkan kategori.';
 
-        // 4. Return ke View KHUSUS DIP (Kita buat file baru bernama 'dip.blade.php')
+        // 6. Return ke View KHUSUS DIP
         return view('frontend.dip', compact('groupedDocuments', 'category_title', 'category_desc'));
     }
     public function showPublic($id)

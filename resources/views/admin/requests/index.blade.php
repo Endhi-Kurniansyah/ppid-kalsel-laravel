@@ -18,15 +18,31 @@
         <div class="d-flex flex-wrap gap-2 mt-3 mt-md-0 align-items-center">
             {{-- FORM FILTER (COMPACT) --}}
             <form action="{{ route('admin.requests.index') }}" method="GET" class="d-flex gap-1">
-                <select name="month" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white" style="width: 110px; border-radius: 20px; font-size: 0.75rem;">
+                {{-- Search Input --}}
+                <input type="text" name="q" class="form-control form-control-sm shadow-sm border-0 bg-white" 
+                       placeholder="Cari NIK/Nama/Tiket..." value="{{ request('q') }}" 
+                       style="width: 150px; border-radius: 20px; font-size: 0.75rem;">
+
+                {{-- Status Filter --}}
+                <select name="status" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white" style="width: 110px; border-radius: 20px; font-size: 0.75rem;">
+                    <option value="">Semua Status</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                    <option value="processed" {{ request('status') == 'processed' ? 'selected' : '' }}>Diproses</option>
+                    <option value="finished" {{ request('status') == 'finished' ? 'selected' : '' }}>Selesai</option>
+                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                </select>
+
+                {{-- Month Filter --}}
+                <select name="month" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white" style="width: 90px; border-radius: 20px; font-size: 0.75rem;">
                     <option value="">Bulan</option>
                     @foreach(range(1, 12) as $m)
                         <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }}>
-                            {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                            {{ DateTime::createFromFormat('!m', $m)->format('M') }}
                         </option>
                     @endforeach
                 </select>
 
+                {{-- Year Filter --}}
                 <select name="year" class="form-select form-select-sm shadow-sm border-0 fw-bold bg-white text-center" style="width: 80px; border-radius: 20px; font-size: 0.75rem;">
                     <option value="">Tahun</option>
                     @foreach(range(date('Y'), 2020) as $y)

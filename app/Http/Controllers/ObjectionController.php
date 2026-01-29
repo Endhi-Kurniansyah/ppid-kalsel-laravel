@@ -94,7 +94,24 @@ class ObjectionController extends Controller
             $query->whereYear('created_at', $request->year);
         }
 
-        // 4. Ambil Data (Pakai Paginate biar halaman tidak berat)
+        // 4. Filter Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // 5. Search by Objection Code or Applicant Name
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function($q) use ($keyword) {
+                $q->where('objection_code', 'LIKE', "%{$keyword}%")
+                  ->orWhereHas('request', function($subQ) use ($keyword) {
+                      $subQ->where('name', 'LIKE', "%{$keyword}%")
+                           ->orWhere('ticket_number', 'LIKE', "%{$keyword}%");
+                  });
+            });
+        }
+
+        // 6. Ambil Data (Pakai Paginate biar halaman tidak berat)
         $objections = $query->paginate(10)->appends($request->all());
 
         return view('admin.objections.index', compact('objections'));

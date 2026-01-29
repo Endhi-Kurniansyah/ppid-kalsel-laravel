@@ -5,17 +5,17 @@
     CONTAINER: FIXED WIDTH (Container-XL)
     Agar tidak terlalu lebar di layar besar, memberikan fokus yang lebih baik.
 --}}
-<div class="container-xl p-4" style="background-color: #f8fafc; min-height: 100vh;">
+<div class="container-fluid d-flex flex-column h-100 p-4" style="background-color: #f8fafc; overflow: hidden;">
 
     {{-- 1. HEADER HALAMAN --}}
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 flex-shrink-0">
         <div>
             <h4 class="fw-bold text-dark mb-1">Konfigurasi Website</h4>
             <p class="text-muted small mb-0">Kelola identitas, kontak, dan pengaturan global sistem.</p>
         </div>
         <div>
             {{-- Tombol Simpan di Header (Pintasan) --}}
-            <button type="submit" form="settingsForm" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm hover-scale">
+            <button type="submit" form="settingsForm" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm hover-scale" style="background-color: var(--primary); border-color: var(--primary);">
                 <i class="bi bi-save2-fill me-2"></i>Simpan Perubahan
             </button>
         </div>
@@ -32,14 +32,14 @@
         </div>
     @endif
 
-    <form id="settingsForm" action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
+    <form id="settingsForm" action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" class="flex-grow-1 d-flex flex-column overflow-hidden">
         @csrf
         @method('PUT')
 
-        <div class="row g-4">
+        <div class="row g-4 flex-grow-1 overflow-hidden">
             {{-- 3. SIDEBAR NAVIGATION --}}
-            <div class="col-lg-3">
-                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white sticky-top" style="top: 2rem;">
+            <div class="col-lg-3 flex-shrink-0">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
                     <div class="card-body p-2">
                         <div class="nav flex-column nav-pills gap-1" id="settingsTab" role="tablist">
                             <button class="nav-link active text-start py-3 px-3 rounded-3 fw-bold small text-uppercase d-flex align-items-center gap-3" data-bs-toggle="pill" data-bs-target="#tab-visual" type="button">
@@ -64,16 +64,16 @@
             </div>
 
             {{-- 4. CONTENT AREA --}}
-            <div class="col-lg-9">
-                <div class="tab-content" id="settingsTabContent">
+            <div class="col-lg-9 h-100 overflow-hidden">
+                <div class="tab-content h-100 overflow-auto pe-2" id="settingsTabContent" style="scrollbar-width: thin;">
 
                     {{-- TAB: IDENTITAS VISUAL --}}
                     <div class="tab-pane fade show active" id="tab-visual" role="tabpanel">
-                        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-                            <div class="card-header bg-white py-3 px-4 border-bottom">
+                        <div class="card border border-light shadow-none rounded-4 h-100 d-flex flex-column bg-white">
+                            <div class="card-header bg-white py-3 px-4 border-bottom flex-shrink-0">
                                 <h6 class="fw-bold text-dark mb-0">Logo & Branding</h6>
                             </div>
-                            <div class="card-body p-4">
+                            <div class="card-body p-4 flex-grow-1 overflow-auto custom-scrollbar">
                                 <div class="row g-4">
                                     <div class="col-md-6">
                                         <div class="p-3 border rounded-4 bg-light bg-opacity-50 h-100">
@@ -128,11 +128,11 @@
 
                     {{-- TAB: INFO KONTAK --}}
                     <div class="tab-pane fade" id="tab-footer" role="tabpanel">
-                        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-                            <div class="card-header bg-white py-3 px-4 border-bottom">
+                        <div class="card border border-light shadow-none rounded-4 h-100 d-flex flex-column bg-white">
+                            <div class="card-header bg-white py-3 px-4 border-bottom flex-shrink-0">
                                 <h6 class="fw-bold text-dark mb-0">Informasi Kontak & Operasional</h6>
                             </div>
-                            <div class="card-body p-4">
+                            <div class="card-body p-4 flex-grow-1 overflow-auto custom-scrollbar">
                                 <div class="row g-4">
                                     <div class="col-md-6">
                                         <label class="form-label small fw-bold text-muted text-uppercase">Jam Layanan (Senin-Kamis)</label>
@@ -178,11 +178,11 @@
 
                     {{-- TAB: SOSIAL MEDIA --}}
                     <div class="tab-pane fade" id="tab-social" role="tabpanel">
-                        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-                            <div class="card-header bg-white py-3 px-4 border-bottom">
+                        <div class="card border border-light shadow-none rounded-4 h-100 d-flex flex-column bg-white">
+                            <div class="card-header bg-white py-3 px-4 border-bottom flex-shrink-0">
                                 <h6 class="fw-bold text-dark mb-0">Tautan Media Sosial</h6>
                             </div>
-                            <div class="card-body p-4">
+                            <div class="card-body p-4 flex-grow-1 overflow-auto custom-scrollbar">
                                 <div class="row g-3">
                                     @php
                                         $socials = [
@@ -212,14 +212,30 @@
 
                     {{-- TAB: LAPORAN PDF --}}
                     <div class="tab-pane fade" id="tab-report" role="tabpanel">
-                        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-                            <div class="card-header bg-white py-3 px-4 border-bottom">
+                        <div class="card border border-light shadow-none rounded-4 h-100 d-flex flex-column bg-white">
+                            <div class="card-header bg-white py-3 px-4 border-bottom flex-shrink-0">
                                 <h6 class="fw-bold text-dark mb-0">Format Kop Laporan</h6>
                             </div>
-                            <div class="card-body p-4">
-                                <div class="mb-4">
-                                    <label class="form-label small fw-bold text-muted text-uppercase">Alamat Kop Surat</label>
-                                    <textarea name="report_header_address" class="form-control bg-light border-0 fw-medium" rows="3" placeholder="Jl. Dharma Praja No. 1...">{{ $settings['report_header_address'] ?? '' }}</textarea>
+                            <div class="card-body p-4 flex-grow-1 overflow-auto custom-scrollbar">
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Alamat Kop Surat</label>
+                                        <textarea name="report_header_address" class="form-control bg-light border-0 fw-medium" rows="2" placeholder="Jl. Dharma Praja No. 1...">{{ $settings['report_header_address'] ?? '' }}</textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Laman (Website)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-0"><i class="bi bi-globe"></i></span>
+                                            <input type="text" name="report_header_website" class="form-control bg-light border-0 fw-bold" value="{{ $settings['report_header_website'] ?? '' }}" placeholder="diskominfomc.kalselprov.go.id">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Email</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-0"><i class="bi bi-envelope"></i></span>
+                                            <input type="email" name="report_header_email" class="form-control bg-light border-0 fw-bold" value="{{ $settings['report_header_email'] ?? '' }}" placeholder="diskominfo@kalselprov.go.id">
+                                        </div>
+                                    </div>
                                 </div>
                                 <h6 class="fw-bold text-primary small text-uppercase mb-3 mt-4 border-bottom pb-2">Penanda Tangan (Pejabat)</h6>
                                 <div class="row g-3">
@@ -250,7 +266,16 @@
     </form>
 </div>
 
+{{-- CSS KHUSUS --}}
 <style>
+    /* Paksa Body Tidak Scroll */
+    html, body { height: 100%; overflow: hidden !important; background-color: #f8fafc; }
+
+    /* Scrollbar Halus */
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
     /* Premium Styling */
     .icon-box {
         width: 32px; height: 32px;
@@ -273,13 +298,22 @@
         background-color: #e0f2fe; color: #0d6efd;
     }
 
+    /* Layout Fixes */
+    .tab-content { height: 100%; }
+    .tab-pane { height: 100%; display: flex; flex-direction: column; min-height: 0; }
+    .card { min-height: 0; }
+    
+    /* Hide Global Footer on this page to prevent scrolling */
+    footer { display: none !important; }
+
     .nav-pills .nav-link.active {
-        background-color: #0d6efd !important;
+        background-color: var(--primary) !important; /* Use System Primary Color */
         color: white !important;
-        box-shadow: 0 4px 6px -1px rgba(13, 110, 253, 0.2), 0 2px 4px -1px rgba(13, 110, 253, 0.1);
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
     }
     .nav-pills .nav-link.active .icon-box {
-        background-color: rgba(255,255,255,0.2); color: white;
+        background-color: rgba(255,255,255,0.2) !important; 
+        color: white !important;
     }
 
     .hover-scale { transition: transform 0.2s; }

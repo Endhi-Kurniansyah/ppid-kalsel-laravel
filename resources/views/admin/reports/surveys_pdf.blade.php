@@ -43,7 +43,7 @@
                 <h3>PEMERINTAH PROVINSI KALIMANTAN SELATAN</h3>
                 <h2>DINAS KOMUNIKASI DAN INFORMATIKA</h2>
                 <p>{{ $reportSettings['report_header_address'] ?? 'Jalan Dharma Praja II Kawasan Perkantoran Pemerintah Provinsi Kalimantan Selatan. Banjarbaru Kode Pos 70732' }}</p>
-                <p>Laman: diskominfomc.kalselprov.go.id | Email: diskominfo@kalselprov.go.id</p>
+                <p>Laman: {{ $reportSettings['report_header_website'] ?? 'diskominfomc.kalselprov.go.id' }} | Email: {{ $reportSettings['report_header_email'] ?? 'diskominfo@kalselprov.go.id' }}</p>
             </td>
         </tr>
     </table>

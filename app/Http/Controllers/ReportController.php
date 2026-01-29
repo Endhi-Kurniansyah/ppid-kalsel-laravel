@@ -39,7 +39,7 @@ class ReportController extends Controller
     public function printRequests(Request $request) {
 
         // 1. Query Dasar
-        $query = InformationRequest::latest();
+        $query = InformationRequest::query();
 
         // 2. Filter Bulan
         if ($request->filled('month')) {
@@ -51,9 +51,24 @@ class ReportController extends Controller
             $query->whereYear('created_at', $request->year);
         }
 
-        $requests = $query->get();
+        // 4. Search by NIK, Name, or Ticket Number
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function($q) use ($keyword) {
+                $q->where('nik', 'LIKE', "%{$keyword}%")
+                  ->orWhere('name', 'LIKE', "%{$keyword}%")
+                  ->orWhere('ticket_number', 'LIKE', "%{$keyword}%");
+            });
+        }
 
-        // 4. Label Periode Dinamis
+        // 5. Filter Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $requests = $query->latest()->get();
+
+        // 5. Label Periode Dinamis
         $periode = "TAHUN " . ($request->year ?? date('Y'));
 
         if ($request->filled('month') && $request->filled('year')) {
@@ -61,7 +76,7 @@ class ReportController extends Controller
             $periode = "PERIODE " . strtoupper($namaBulan) . " " . $request->year;
         }
 
-        // 5. Generate PDF
+        // 6. Generate PDF
         return $this->generatePdf('admin.reports.requests_pdf', compact('requests', 'periode'), 'Laporan_Permohonan');
     }
 
@@ -71,7 +86,7 @@ class ReportController extends Controller
     public function printDocuments(Request $request) {
 
         // 1. Query Dasar
-        $query = Document::query()->latest();
+        $query = Document::query();
 
         // 2. Filter Bulan
         if ($request->filled('month')) {
@@ -83,20 +98,31 @@ class ReportController extends Controller
             $query->whereYear('created_at', $request->year);
         }
 
-        $documents = $query->get();
+        // 4. Filter Kategori
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
 
-        // 4. Label Periode Dinamis
-        // Default: TAHUN [Tahun Input] atau [Tahun Sekarang]
+        // 5. Search by Title/Description
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function($q) use ($keyword) {
+                $q->where('title', 'LIKE', "%{$keyword}%")
+                  ->orWhere('description', 'LIKE', "%{$keyword}%");
+            });
+        }
+
+        $documents = $query->latest()->get();
+
+        // 6. Label Periode Dinamis
         $periode = "TAHUN " . ($request->year ?? date('Y'));
 
-        // Jika Bulan & Tahun dipilih, judul lebih spesifik
         if ($request->filled('month') && $request->filled('year')) {
             $namaBulan = Carbon::createFromDate(null, $request->month)->translatedFormat('F');
             $periode = "PERIODE " . strtoupper($namaBulan) . " " . $request->year;
         }
 
-        // 5. Generate PDF
-        // Variabel '$periode' dikirim ke view agar judul PDF berubah
+        // 7. Generate PDF
         return $this->generatePdf('admin.reports.documents_pdf', compact('documents', 'periode'), 'Laporan_Dokumen');
     }
 
@@ -106,7 +132,7 @@ class ReportController extends Controller
     public function printNews(Request $request) {
 
         // 1. Query Dasar
-        $query = Post::with(['category', 'user'])->latest();
+        $query = Post::with(['category', 'user']);
 
         // 2. Filter Bulan
         if ($request->filled('month')) {
@@ -118,9 +144,34 @@ class ReportController extends Controller
             $query->whereYear('created_at', $request->year);
         }
 
+        // 4. Filter Kategori
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // 5. Search by Title
+        if ($request->filled('q')) {
+            $query->where('title', 'LIKE', '%' . $request->q . '%');
+        }
+
+        // 6. Sort Options
+        $sort = $request->get('sort', 'terbaru');
+        switch ($sort) {
+            case 'terlama':
+                $query->oldest();
+                break;
+            case 'terpopuler':
+                $query->orderBy('views', 'desc');
+                break;
+            case 'terbaru':
+            default:
+                $query->latest();
+                break;
+        }
+
         $posts = $query->get();
 
-        // 4. Label Periode Dinamis
+        // 7. Label Periode Dinamis
         $labelPeriode = "TAHUN " . ($request->year ?? date('Y'));
 
         if ($request->filled('month') && $request->filled('year')) {
@@ -128,8 +179,7 @@ class ReportController extends Controller
             $labelPeriode = "PERIODE " . strtoupper($namaBulan) . " " . $request->year;
         }
 
-        // 5. Generate PDF
-        // Note: View PDF Berita memakai variabel '$labelPeriode', sedangkan Dokumen memakai '$periode'
+        // 8. Generate PDF
         return $this->generatePdf('admin.reports.news_pdf', compact('posts', 'labelPeriode'), 'Laporan_Berita');
     }
 
@@ -193,9 +243,26 @@ class ReportController extends Controller
             $query->whereYear('created_at', $request->year);
         }
 
+        // 4. Filter Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // 5. Search by Objection Code or Applicant Name
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function($q) use ($keyword) {
+                $q->where('objection_code', 'LIKE', "%{$keyword}%")
+                  ->orWhereHas('request', function($subQ) use ($keyword) {
+                      $subQ->where('name', 'LIKE', "%{$keyword}%")
+                           ->orWhere('ticket_number', 'LIKE', "%{$keyword}%");
+                  });
+            });
+        }
+
         $objections = $query->get();
 
-        // 4. Label Periode Dinamis
+        // 6. Label Periode Dinamis
         $periode = "TAHUN " . ($request->year ?? date('Y'));
 
         if ($request->filled('month') && $request->filled('year')) {
@@ -203,7 +270,7 @@ class ReportController extends Controller
             $periode = "PERIODE " . strtoupper($namaBulan) . " " . $request->year;
         }
 
-        // 5. Generate PDF
+        // 7. Generate PDF
         $pdf = Pdf::loadView('admin.reports.objections_pdf', compact('objections', 'periode'));
         $pdf->setPaper('a4', 'landscape'); // Landscape karena kolom keberatan biasanya lebar
         return $pdf->stream('Laporan_Keberatan.pdf');

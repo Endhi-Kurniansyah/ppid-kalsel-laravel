@@ -50,6 +50,20 @@
 
     {{-- 2. RINGKASAN STATISTIK (TANPA GARIS BAWAH & TANPA SHADOW ICON) --}}
     <div class="row g-3 mb-3 flex-shrink-0">
+        {{-- CARD RATA-RATA KESELURUHAN --}}
+        <div class="col-12 col-md-4 col-lg-2">
+            <div class="card border-0 shadow-sm rounded-4 h-100 bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body text-center p-3 text-white">
+                    <div class="mb-2">
+                        <i class="bi bi-star-fill fs-2"></i>
+                    </div>
+                    <h3 class="fw-bold mb-0">{{ number_format($averageRating, 1) }}</h3>
+                    <p class="small fw-bold mb-0 opacity-75" style="font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px;">RATA-RATA</p>
+                    <p class="small mb-0 mt-1 opacity-75" style="font-size: 0.65rem;">{{ number_format($totalResponden) }} Responden</p>
+                </div>
+            </div>
+        </div>
+
         @php
             $labels = [
                 5 => ['teks' => 'Sangat Puas', 'color' => '#10b981', 'icon' => 'bi-emoji-heart-eyes'],

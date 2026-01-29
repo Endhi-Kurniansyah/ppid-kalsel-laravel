@@ -48,7 +48,7 @@
                     {{-- Input Field --}}
                     <input type="text" name="q"
                            class="form-control border-0 py-3 ps-3"
-                           placeholder="Ketik kata kunci dokumen (misal: Renstra, Anggaran)..."
+                           placeholder="Cari dokumen atau berita..."
                            required
                            style="font-size: 1.1rem;">
 
@@ -58,13 +58,6 @@
                     </button>
                 </div>
             </form>
-            {{-- Teks Bantuan di Bawah Search --}}
-            <div class="mt-3 text-white-50 small">
-                <i class="bi bi-info-circle me-1"></i> Populer:
-                <a href="#" class="text-white text-decoration-underline opacity-75 hover-opacity-100 me-2">Renstra</a>
-                <a href="#" class="text-white text-decoration-underline opacity-75 hover-opacity-100 me-2">LAKIP</a>
-                <a href="#" class="text-white text-decoration-underline opacity-75 hover-opacity-100">Anggaran</a>
-            </div>
         </div>
     </div>
 

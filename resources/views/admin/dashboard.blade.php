@@ -18,12 +18,7 @@
         </div>
 
         <div class="mt-3 mt-md-0 d-flex gap-2 align-items-center">
-            {{-- Tanggal --}}
-            <div class="bg-white border rounded-pill px-3 py-2 shadow-sm d-none d-md-block">
-                <small class="fw-bold text-secondary font-monospace">
-                    <i class="bi bi-calendar-check me-2 text-success"></i>{{ date('d F Y') }}
-                </small>
-            </div>
+
 
             {{-- Form Cetak --}}
             <form action="{{ route('admin.reports.statistics') }}" method="GET" target="_blank" class="d-flex gap-2">

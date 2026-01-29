@@ -58,12 +58,16 @@ class SurveyController extends Controller
             ->orderBy('rating', 'desc')
             ->get();
 
-        // 5. Ambil Data Tabel
+        // 5. Hitung Rata-rata dan Total Keseluruhan
+        $totalResponden = (clone $query)->reorder()->count();
+        $averageRating = $totalResponden > 0 ? (clone $query)->reorder()->avg('rating') : 0;
+
+        // 6. Ambil Data Tabel
         // Kalau tabel tetap butuh 'latest()', jadi biarkan saja
         $surveys = (clone $query)
             ->paginate(10)
             ->appends($request->all());
 
-        return view('admin.surveys.index', compact('results', 'surveys'));
+        return view('admin.surveys.index', compact('results', 'surveys', 'totalResponden', 'averageRating'));
     }
 }
