@@ -1,276 +1,302 @@
 @extends('layouts.admin')
 
 @section('content')
-{{-- Scroll Normal --}}
-<div class="container-fluid p-4" style="background-color: #f8fafc; min-height: 100vh;">
+{{-- 
+    CONTAINER: FIXED WIDTH (Container-XL)
+    Agar tidak terlalu lebar di layar besar, memberikan fokus yang lebih baik.
+--}}
+<div class="container-xl p-4" style="background-color: #f8fafc; min-height: 100vh;">
 
     {{-- 1. HEADER HALAMAN --}}
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 pb-3 border-bottom border-secondary border-opacity-10">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5">
         <div>
             <h4 class="fw-bold text-dark mb-1">Konfigurasi Website</h4>
-            <p class="text-muted small mb-0">Atur identitas visual, informasi kontak, dan media sosial portal publik.</p>
+            <p class="text-muted small mb-0">Kelola identitas, kontak, dan pengaturan global sistem.</p>
+        </div>
+        <div>
+            {{-- Tombol Simpan di Header (Pintasan) --}}
+            <button type="submit" form="settingsForm" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm hover-scale">
+                <i class="bi bi-save2-fill me-2"></i>Simpan Perubahan
+            </button>
         </div>
     </div>
 
     {{-- 2. NOTIFIKASI --}}
     @if(session('success'))
-        <div class="alert alert-success border-0 shadow-none rounded-3 mb-4 d-flex align-items-center bg-white border-start border-success border-4">
-            <i class="bi bi-check-circle-fill me-3 fs-5 text-success"></i>
-            <div class="text-dark fw-medium small"><strong>Berhasil!</strong> {{ session('success') }}</div>
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert alert-success border-0 shadow-sm rounded-4 mb-4 d-flex align-items-center bg-white border-start border-success border-4 animate-fade-in">
+            <div class="bg-success bg-opacity-10 text-success rounded-circle p-2 me-3">
+                <i class="bi bi-check-lg fs-5"></i>
+            </div>
+            <div class="text-dark fw-bold small">{{ session('success') }}</div>
+            <button type="button" class="btn-close ms-auto small" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
-    {{-- 3. MAIN CARD (FLAT DESIGN) --}}
-    <div class="card border border-light shadow-none rounded-4 overflow-hidden bg-white">
-        <div class="card-body p-0">
-            <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+    <form id="settingsForm" action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-                <div class="row g-0">
-                    {{-- SIDE NAV TABS --}}
-                    <div class="col-md-3 border-end bg-light bg-opacity-30">
-                        <div class="nav flex-column nav-pills p-3 gap-2" id="settingsTab" role="tablist">
-                            <button class="nav-link active text-start py-3 px-4 border-0 rounded-3 fw-bold small text-uppercase ls-1" data-bs-toggle="pill" data-bs-target="#tab-visual" type="button">
-                                <i class="bi bi-palette me-2"></i> Identitas Visual
+        <div class="row g-4">
+            {{-- 3. SIDEBAR NAVIGATION --}}
+            <div class="col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white sticky-top" style="top: 2rem;">
+                    <div class="card-body p-2">
+                        <div class="nav flex-column nav-pills gap-1" id="settingsTab" role="tablist">
+                            <button class="nav-link active text-start py-3 px-3 rounded-3 fw-bold small text-uppercase d-flex align-items-center gap-3" data-bs-toggle="pill" data-bs-target="#tab-visual" type="button">
+                                <div class="icon-box rounded-circle"><i class="bi bi-palette-fill"></i></div>
+                                <span>Identitas Visual</span>
                             </button>
-                            <button class="nav-link text-start py-3 px-4 border-0 rounded-3 fw-bold small text-uppercase ls-1" data-bs-toggle="pill" data-bs-target="#tab-footer" type="button">
-                                <i class="bi bi-info-square me-2"></i> Informasi Footer
+                            <button class="nav-link text-start py-3 px-3 rounded-3 fw-bold small text-uppercase d-flex align-items-center gap-3" data-bs-toggle="pill" data-bs-target="#tab-footer" type="button">
+                                <div class="icon-box rounded-circle"><i class="bi bi-info-circle-fill"></i></div>
+                                <span>Info Kontak</span>
                             </button>
-                            <button class="nav-link text-start py-3 px-4 border-0 rounded-3 fw-bold small text-uppercase ls-1" data-bs-toggle="pill" data-bs-target="#tab-social" type="button">
-                                <i class="bi bi-share me-2"></i> Media Sosial
+                            <button class="nav-link text-start py-3 px-3 rounded-3 fw-bold small text-uppercase d-flex align-items-center gap-3" data-bs-toggle="pill" data-bs-target="#tab-social" type="button">
+                                <div class="icon-box rounded-circle"><i class="bi bi-share-fill"></i></div>
+                                <span>Sosial Media</span>
                             </button>
-                            <button class="nav-link text-start py-3 px-4 border-0 rounded-3 fw-bold small text-uppercase ls-1" data-bs-toggle="pill" data-bs-target="#tab-report" type="button">
-                                <i class="bi bi-file-earmark-pdf me-2"></i> Laporan (PDF)
+                            <button class="nav-link text-start py-3 px-3 rounded-3 fw-bold small text-uppercase d-flex align-items-center gap-3" data-bs-toggle="pill" data-bs-target="#tab-report" type="button">
+                                <div class="icon-box rounded-circle"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+                                <span>Laporan PDF</span>
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    {{-- CONTENT AREA --}}
-                    <div class="col-md-9">
-                        <div class="tab-content p-4 p-md-5" id="settingsTabContent">
+            {{-- 4. CONTENT AREA --}}
+            <div class="col-lg-9">
+                <div class="tab-content" id="settingsTabContent">
 
-                            {{-- TAB: IDENTITAS VISUAL --}}
-                            <div class="tab-pane fade show active" id="tab-visual" role="tabpanel">
-                                <h6 class="fw-bold text-dark mb-4 border-bottom pb-2 text-uppercase ls-1">Logo & Branding</h6>
+                    {{-- TAB: IDENTITAS VISUAL --}}
+                    <div class="tab-pane fade show active" id="tab-visual" role="tabpanel">
+                        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+                            <div class="card-header bg-white py-3 px-4 border-bottom">
+                                <h6 class="fw-bold text-dark mb-0">Logo & Branding</h6>
+                            </div>
+                            <div class="card-body p-4">
                                 <div class="row g-4">
                                     <div class="col-md-6">
-                                        <div class="p-4 border border-light rounded-4 bg-white">
-                                            <label class="fw-bold text-muted small text-uppercase mb-3 d-block ls-1">Logo Navbar (Terang)</label>
-                                            <div class="d-flex align-items-center p-3 bg-light rounded-4 mb-3 border border-dashed" style="min-height: 140px;">
+                                        <div class="p-3 border rounded-4 bg-light bg-opacity-50 h-100">
+                                            <label class="fw-bold text-dark small text-uppercase mb-3 d-block ls-1">Logo Navbar (Header)</label>
+                                            <div class="d-flex align-items-center justify-content-center p-3 bg-white rounded-3 border mb-3" style="height: 120px; border-style: dashed !important;">
                                                 @if(isset($settings['site_logo']))
-                                                    <img src="{{ asset('storage/' . $settings['site_logo']) }}" class="img-fluid mx-auto d-block" style="max-height: 70px;">
+                                                    <img src="{{ asset('storage/' . $settings['site_logo']) }}" class="img-fluid" style="max-height: 60px;">
                                                 @else
-                                                    <div class="text-center w-100 text-muted opacity-50 small"><i class="bi bi-image fs-1 d-block mb-1"></i> Belum ada logo</div>
+                                                    <small class="text-muted">Upload Logo</small>
                                                 @endif
                                             </div>
-                                            <input type="file" name="site_logo" class="form-control form-control-sm bg-light border-0 shadow-none">
+                                            <input type="file" name="site_logo" class="form-control form-control-sm bg-white">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="p-4 border-0 rounded-4 bg-dark shadow-none">
-                                            <label class="fw-bold text-white-50 small text-uppercase mb-3 d-block ls-1">Logo Footer (Gelap)</label>
-                                            <div class="d-flex align-items-center p-3 bg-white bg-opacity-10 rounded-4 mb-3 border border-secondary border-dashed" style="min-height: 140px;">
+                                        <div class="p-3 border rounded-4 bg-dark h-100">
+                                            <label class="fw-bold text-white-50 small text-uppercase mb-3 d-block ls-1">Logo Footer</label>
+                                            <div class="d-flex align-items-center justify-content-center p-3 bg-white bg-opacity-10 rounded-3 border border-secondary mb-3" style="height: 120px; border-style: dashed !important;">
                                                 @if(isset($settings['footer_logo']))
-                                                    <img src="{{ asset('storage/' . $settings['footer_logo']) }}" class="img-fluid mx-auto d-block" style="max-height: 70px;">
+                                                    <img src="{{ asset('storage/' . $settings['footer_logo']) }}" class="img-fluid" style="max-height: 60px;">
                                                 @else
-                                                    <div class="text-center w-100 text-white-50 opacity-50 small"><i class="bi bi-image fs-1 d-block mb-1"></i> Belum ada logo</div>
+                                                    <small class="text-white-50">Upload Logo Putih</small>
                                                 @endif
                                             </div>
-                                            <input type="file" name="footer_logo" class="form-control form-control-sm bg-white bg-opacity-10 text-white border-0 shadow-none">
+                                            <input type="file" name="footer_logo" class="form-control form-control-sm bg-white bg-opacity-10 text-white border-secondary">
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <div class="p-4 border border-light rounded-4 bg-white mt-2">
-                                            <label class="fw-bold text-muted small text-uppercase mb-3 d-block ls-1">Background Hero (Halaman Utama)</label>
-                                            <div class="row g-4 align-items-center">
-                                                <div class="col-md-5">
-                                                    @if(isset($settings['hero_bg']))
-                                                        <div class="rounded-4 overflow-hidden border border-light shadow-none">
-                                                            <img src="{{ asset('storage/' . $settings['hero_bg']) }}" class="img-fluid d-block" style="max-height: 160px; width: 100%; object-fit: cover;">
-                                                        </div>
-                                                    @else
-                                                        <div class="bg-light rounded-4 d-flex align-items-center justify-content-center border border-dashed" style="height: 160px;">
-                                                            <span class="text-muted small opacity-50">Belum ada gambar</span>
-                                                        </div>
-                                                    @endif
+                                        <div class="p-3 border rounded-4 bg-white">
+                                            <label class="fw-bold text-dark small text-uppercase mb-2 d-block ls-1">Hero Background (Beranda)</label>
+                                            <div class="row align-items-center">
+                                                <div class="col-md-4">
+                                                    <div class="rounded-3 overflow-hidden border bg-light d-flex align-items-center justify-content-center" style="height: 100px;">
+                                                        @if(isset($settings['hero_bg']))
+                                                            <img src="{{ asset('storage/' . $settings['hero_bg']) }}" class="img-fluid w-100 h-100 object-fit-cover">
+                                                        @else
+                                                            <small class="text-muted">No Image</small>
+                                                        @endif
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-7">
-                                                    <input type="file" name="hero_bg" class="form-control bg-light border-0 shadow-none py-2 mb-2">
-                                                    <small class="text-muted d-block">Rekomendasi ukuran: 1920 x 1080 pixel (HD) untuk hasil maksimal di desktop.</small>
+                                                <div class="col-md-8">
+                                                    <input type="file" name="hero_bg" class="form-control mb-1">
+                                                    <small class="text-muted d-block">Ukuran ideal: 1920x1080 px (Landscape).</small>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            {{-- TAB: INFORMASI FOOTER --}}
-                            <div class="tab-pane fade" id="tab-footer" role="tabpanel">
-                                <h6 class="fw-bold text-dark mb-4 border-bottom pb-2 text-uppercase ls-1">Kontak & Operasional</h6>
+                    {{-- TAB: INFO KONTAK --}}
+                    <div class="tab-pane fade" id="tab-footer" role="tabpanel">
+                        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+                            <div class="card-header bg-white py-3 px-4 border-bottom">
+                                <h6 class="fw-bold text-dark mb-0">Informasi Kontak & Operasional</h6>
+                            </div>
+                            <div class="card-body p-4">
                                 <div class="row g-4">
                                     <div class="col-md-6">
-                                        <div class="p-4 border border-light rounded-4 bg-white">
-                                            <h6 class="fw-bold mb-4 small text-primary text-uppercase ls-1"><i class="bi bi-clock me-2"></i>Jam Layanan</h6>
-                                            <div class="mb-3">
-                                                <label class="form-label small fw-bold text-muted">Senin - Kamis</label>
-                                                <input type="text" name="footer_hours_weekday" class="form-control border-0 bg-light shadow-none" value="{{ $settings['footer_hours_weekday'] ?? '08:00 - 16:00' }}">
-                                            </div>
-                                            <div>
-                                                <label class="form-label small fw-bold text-muted">Jumat</label>
-                                                <input type="text" name="footer_hours_friday" class="form-control border-0 bg-light shadow-none" value="{{ $settings['footer_hours_friday'] ?? '08:00 - 11:00' }}">
-                                            </div>
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Jam Layanan (Senin-Kamis)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-0"><i class="bi bi-clock"></i></span>
+                                            <input type="text" name="footer_hours_weekday" class="form-control bg-light border-0 fw-bold" value="{{ $settings['footer_hours_weekday'] ?? '08:00 - 16:00' }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="p-4 border border-light rounded-4 bg-white">
-                                            <h6 class="fw-bold mb-4 small text-primary text-uppercase ls-1"><i class="bi bi-telephone me-2"></i>Kontak Kantor</h6>
-                                            <div class="mb-3">
-                                                <label class="form-label small fw-bold text-muted">WhatsApp / Telepon</label>
-                                                <input type="text" name="footer_phone" class="form-control border-0 bg-light shadow-none" value="{{ $settings['footer_phone'] ?? '' }}">
-                                            </div>
-                                            <div>
-                                                <label class="form-label small fw-bold text-muted">Email Resmi</label>
-                                                <input type="email" name="footer_email" class="form-control border-0 bg-light shadow-none" value="{{ $settings['footer_email'] ?? '' }}">
-                                            </div>
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Jam Layanan (Jumat)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-0"><i class="bi bi-clock-history"></i></span>
+                                            <input type="text" name="footer_hours_friday" class="form-control bg-light border-0 fw-bold" value="{{ $settings['footer_hours_friday'] ?? '08:00 - 11:00' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Telepon / WhatsApp</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-0"><i class="bi bi-telephone"></i></span>
+                                            <input type="text" name="footer_phone" class="form-control bg-light border-0 fw-bold" value="{{ $settings['footer_phone'] ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Email Resmi</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-0"><i class="bi bi-envelope"></i></span>
+                                            <input type="email" name="footer_email" class="form-control bg-light border-0 fw-bold" value="{{ $settings['footer_email'] ?? '' }}">
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <div class="p-4 border border-light rounded-4 bg-white mt-0">
-                                            <label class="fw-bold text-muted small text-uppercase mb-3 d-block ls-1">Alamat Kantor Lengkap</label>
-                                            <textarea name="footer_address" class="form-control border-0 bg-light shadow-none" rows="3">{{ $settings['footer_address'] ?? '' }}</textarea>
-                                        </div>
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Alamat Lengkap</label>
+                                        <textarea name="footer_address" class="form-control bg-light border-0 fw-medium" rows="2">{{ $settings['footer_address'] ?? '' }}</textarea>
                                     </div>
                                     <div class="col-12">
-                                        <div class="p-4 border border-light rounded-4 bg-white mt-0">
-                                            <label class="fw-bold text-muted small text-uppercase mb-3 d-block ls-1">Link Google Maps (Embed)</label>
-                                            <textarea name="contact_google_maps_link" class="form-control border-0 bg-light shadow-none text-muted small" rows="3" placeholder='Pastikan link berawalan: https://www.google.com/maps/embed...'>{{ $settings['contact_google_maps_link'] ?? '' }}</textarea>
-                                            <div class="alert alert-info border-0 d-flex align-items-start small p-2 mt-2">
-                                                <i class="bi bi-info-circle-fill me-2 fs-5 text-primary"></i>
-                                                <div>
-                                                    <strong>PENTING:</strong> Link pendek seperti <code>maps.app.goo.gl</code> <u>TIDAK BISA</u> digunakan.<br>
-                                                    Caranya: Buka Google Maps > Cari lokasi > Klik tombol <strong>Bagikan</strong> (Share) > Pilih <strong>Sematkan Peta</strong> (Embed a map) > Salin HTML-nya > Tempel di sini.
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <label class="form-label small fw-bold text-muted text-uppercase">Embed Google Maps</label>
+                                        <textarea name="contact_google_maps_link" class="form-control bg-light border-0 font-monospace small text-muted" rows="3" placeholder="<iframe src='...'></iframe>">{{ $settings['contact_google_maps_link'] ?? '' }}</textarea>
+                                        <div class="form-text text-muted small"><i class="bi bi-info-circle me-1"></i>Copy kode 'Embed a map' dari Google Maps, bukan link share biasa.</div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            {{-- TAB: MEDIA SOSIAL --}}
-                            <div class="tab-pane fade" id="tab-social" role="tabpanel">
-                                <h6 class="fw-bold text-dark mb-4 border-bottom pb-2 text-uppercase ls-1">Media Sosial</h6>
+                    {{-- TAB: SOSIAL MEDIA --}}
+                    <div class="tab-pane fade" id="tab-social" role="tabpanel">
+                        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+                            <div class="card-header bg-white py-3 px-4 border-bottom">
+                                <h6 class="fw-bold text-dark mb-0">Tautan Media Sosial</h6>
+                            </div>
+                            <div class="card-body p-4">
                                 <div class="row g-3">
                                     @php
                                         $socials = [
-                                            ['name' => 'social_facebook', 'label' => 'Facebook', 'icon' => 'bi-facebook', 'color' => '#1877F2'],
-                                            ['name' => 'social_instagram', 'label' => 'Instagram', 'icon' => 'bi-instagram', 'color' => '#E4405F'],
-                                            ['name' => 'social_twitter', 'label' => 'Twitter / X', 'icon' => 'bi-twitter-x', 'color' => '#000000'],
-                                            ['name' => 'social_youtube', 'label' => 'Youtube', 'icon' => 'bi-youtube', 'color' => '#FF0000'],
+                                            ['name' => 'social_facebook', 'label' => 'Facebook', 'icon' => 'bi-facebook', 'color' => '#1877F2', 'ph' => 'facebook.com/...'],
+                                            ['name' => 'social_instagram', 'label' => 'Instagram', 'icon' => 'bi-instagram', 'color' => '#E4405F', 'ph' => 'instagram.com/...'],
+                                            ['name' => 'social_twitter', 'label' => 'X (Twitter)', 'icon' => 'bi-twitter-x', 'color' => '#000000', 'ph' => 'x.com/...'],
+                                            ['name' => 'social_youtube', 'label' => 'YouTube', 'icon' => 'bi-youtube', 'color' => '#FF0000', 'ph' => 'youtube.com/...'],
                                         ];
                                     @endphp
-                                    @foreach($socials as $social)
+                                    @foreach($socials as $soc)
                                     <div class="col-md-6">
-                                        <div class="p-3 border border-light rounded-4 d-flex align-items-center gap-3 bg-white">
-                                            <div class="p-3 rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; color: {{ $social['color'] }};">
-                                                <i class="bi {{ $social['icon'] }} fs-4"></i>
+                                        <div class="d-flex align-items-center p-2 border rounded-4 bg-white hover-scale">
+                                            <div class="rounded-3 d-flex align-items-center justify-content-center p-3 me-3" style="background-color: {{ $soc['color'] }}15; color: {{ $soc['color'] }}; width: 50px; height: 50px;">
+                                                <i class="bi {{ $soc['icon'] }} fs-4"></i>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <label class="small fw-bold text-muted text-uppercase mb-1 d-block" style="font-size: 0.65rem;">{{ $social['label'] }} URL</label>
-                                                <input type="url" name="{{ $social['name'] }}" class="form-control border-0 bg-light shadow-none py-1" value="{{ $settings[$social['name']] ?? '' }}" placeholder="https://...">
+                                                <label class="small fw-bold text-muted text-uppercase mb-0" style="font-size: 0.65rem;">{{ $soc['label'] }}</label>
+                                                <input type="url" name="{{ $soc['name'] }}" class="form-control form-control-sm border-0 shadow-none ps-0 fw-bold text-dark" value="{{ $settings[$soc['name']] ?? '' }}" placeholder="{{ $soc['ph'] }}">
                                             </div>
                                         </div>
                                     </div>
                                     @endforeach
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            {{-- TAB: PENGATURAN LAPORAN (PDF) --}}
-                            <div class="tab-pane fade" id="tab-report" role="tabpanel">
-                                <h6 class="fw-bold text-dark mb-4 border-bottom pb-2 text-uppercase ls-1">Konfigurasi Kop & Tanda Tangan Laporan</h6>
-                                <div class="row g-4">
-                                    <div class="col-12">
-                                        <div class="p-4 border border-light rounded-4 bg-white">
-                                            <h6 class="fw-bold mb-4 small text-primary text-uppercase ls-1"><i class="bi bi-building me-2"></i>Kop Surat</h6>
-                                            <label class="fw-bold text-muted small text-uppercase mb-3 d-block ls-1">Alamat Kop Surat</label>
-                                            <textarea name="report_header_address" class="form-control border-0 bg-light shadow-none" rows="3" placeholder="Alamat lengkap instansi untuk header laporan...">{{ $settings['report_header_address'] ?? '' }}</textarea>
-                                            <small class="text-muted mt-2 d-block">Jika dikosongkan, akan menggunakan alamat dari footer website.</small>
-                                        </div>
+                    {{-- TAB: LAPORAN PDF --}}
+                    <div class="tab-pane fade" id="tab-report" role="tabpanel">
+                        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+                            <div class="card-header bg-white py-3 px-4 border-bottom">
+                                <h6 class="fw-bold text-dark mb-0">Format Kop Laporan</h6>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="mb-4">
+                                    <label class="form-label small fw-bold text-muted text-uppercase">Alamat Kop Surat</label>
+                                    <textarea name="report_header_address" class="form-control bg-light border-0 fw-medium" rows="3" placeholder="Jl. Dharma Praja No. 1...">{{ $settings['report_header_address'] ?? '' }}</textarea>
+                                </div>
+                                <h6 class="fw-bold text-primary small text-uppercase mb-3 mt-4 border-bottom pb-2">Penanda Tangan (Pejabat)</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-muted">Nama Lengkap</label>
+                                        <input type="text" name="report_signer_name" class="form-control bg-light border-0 fw-bold" value="{{ $settings['report_signer_name'] ?? '' }}">
                                     </div>
-                                    <div class="col-12">
-                                        <div class="p-4 border border-light rounded-4 bg-white">
-                                            <h6 class="fw-bold mb-4 small text-primary text-uppercase ls-1"><i class="bi bi-pen me-2"></i>Penanda Tangan (Pejabat)</h6>
-                                            <div class="row g-3">
-                                                <div class="col-md-6">
-                                                    <label class="form-label small fw-bold text-muted">Nama Lengkap & Gelar</label>
-                                                    <input type="text" name="report_signer_name" class="form-control border-0 bg-light shadow-none" value="{{ $settings['report_signer_name'] ?? '' }}" placeholder="Contoh: Dr. H. MUHAMAD MUSLIM, S.Pd., M.Kes.">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label small fw-bold text-muted">NIP</label>
-                                                    <input type="text" name="report_signer_nip" class="form-control border-0 bg-light shadow-none" value="{{ $settings['report_signer_nip'] ?? '' }}">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label small fw-bold text-muted">Jabatan</label>
-                                                    <input type="text" name="report_signer_position" class="form-control border-0 bg-light shadow-none" value="{{ $settings['report_signer_position'] ?? '' }}" placeholder="Contoh: Pejabat Pengelola PPID">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label small fw-bold text-muted">Pangkat / Golongan</label>
-                                                    <input type="text" name="report_signer_rank" class="form-control border-0 bg-light shadow-none" value="{{ $settings['report_signer_rank'] ?? '' }}" placeholder="Contoh: Pembina Utama Muda">
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-muted">NIP</label>
+                                        <input type="text" name="report_signer_nip" class="form-control bg-light border-0 fw-bold font-monospace" value="{{ $settings['report_signer_nip'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-muted">Jabatan</label>
+                                        <input type="text" name="report_signer_position" class="form-control bg-light border-0 fw-bold" value="{{ $settings['report_signer_position'] ?? '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-muted">Pangkat/Golongan</label>
+                                        <input type="text" name="report_signer_rank" class="form-control bg-light border-0 fw-bold" value="{{ $settings['report_signer_rank'] ?? '' }}">
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="mt-5 pt-4 border-top d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary px-5 py-2 fw-bold rounded-pill shadow-none hover-scale">
-                                    <i class="bi bi-save2-fill me-2"></i> Simpan Konfigurasi
-                                </button>
-                            </div>
                         </div>
                     </div>
+
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <style>
-    /* Styling Body */
-    body { background-color: #f8fafc; overflow-y: auto !important; }
+    /* Premium Styling */
+    .icon-box {
+        width: 32px; height: 32px;
+        display: flex; align-items: center; justify-content: center;
+        background-color: #f1f5f9; color: #64748b;
+        transition: all 0.2s;
+    }
 
-    /* Tabs Styling - Flat & Clean */
     .nav-pills .nav-link {
         color: #64748b;
-        transition: all 0.2s ease;
-        border: 1px solid transparent !important;
+        background: transparent;
+        transition: all 0.2s;
     }
+
+    .nav-pills .nav-link:hover {
+        background-color: #f8fafc;
+        color: #0d6efd;
+    }
+    .nav-pills .nav-link:hover .icon-box {
+        background-color: #e0f2fe; color: #0d6efd;
+    }
+
     .nav-pills .nav-link.active {
         background-color: #0d6efd !important;
         color: white !important;
-        box-shadow: none !important;
+        box-shadow: 0 4px 6px -1px rgba(13, 110, 253, 0.2), 0 2px 4px -1px rgba(13, 110, 253, 0.1);
     }
-    .nav-pills .nav-link:not(.active):hover {
-        background-color: #f1f5f9;
-        color: #0f172a;
-    }
-
-    /* Form UI */
-    .form-control:focus {
-        background-color: #fff !important;
-        border: 1px solid #0d6efd !important;
+    .nav-pills .nav-link.active .icon-box {
+        background-color: rgba(255,255,255,0.2); color: white;
     }
 
-    .border-dashed { border-style: dashed !important; border-width: 2px !important; border-color: #e2e8f0 !important; }
-
-    .ls-1 { letter-spacing: 0.5px; }
-    .hover-scale { transition: transform 0.2s ease; }
+    .hover-scale { transition: transform 0.2s; }
     .hover-scale:hover { transform: translateY(-2px); }
+    
+    .form-control:focus {
+        box-shadow: none; border-bottom: 2px solid #0d6efd !important;
+        background-color: #fff !important;
+    }
+    .ls-1 { letter-spacing: 0.5px; }
 
-    /* Button Primary Custom */
-    .btn-primary { background-color: #0d6efd; border: none; }
-    .btn-primary:hover { background-color: #0b5ed7; }
+    .object-fit-cover { object-fit: cover; }
+    
+    .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 </style>
 @endsection

@@ -102,6 +102,8 @@
                                     <option value="Informasi Berkala Tidak Disediakan">Informasi Berkala Tidak Disediakan</option>
                                     <option value="Permintaan Tidak Ditanggapi">Permintaan Tidak Ditanggapi</option>
                                     <option value="Permintaan Tidak Dipenuhi Sebagaimana Mestinya">Permintaan Tidak Dipenuhi Sebagaimana Mestinya</option>
+                                    <option value="Informasi yang Diberikan Tidak Utuh">Informasi yang Diberikan Tidak Utuh</option>
+                                    <option value="Informasi Tidak Sesuai dengan Permintaan">Informasi Tidak Sesuai dengan Permintaan</option>
                                     <option value="Biaya yang Dikenakan Tidak Wajar">Biaya yang Dikenakan Tidak Wajar</option>
                                     <option value="Penyampaian Informasi Melebihi Waktu">Penyampaian Informasi Melebihi Waktu</option>
                                 </select>

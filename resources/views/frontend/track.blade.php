@@ -23,7 +23,7 @@
 
         {{-- Judul Emas --}}
         <h1 class="display-3 fw-bold mb-3 animate-fade-up text-white">
-            Lacak <span class="text-gradient-gold">Permohonan</span>
+            Lacak <span class="text-gradient-gold">Status</span>
         </h1>
 
         {{-- Deskripsi --}}
@@ -50,12 +50,12 @@
                 <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-5 animate-fade-up delay-200">
                     <div class="card-body p-4 p-md-5">
                         <form action="{{ route('requests.track') }}" method="GET">
-                            <label class="form-label fw-bold text-muted small text-uppercase ls-1 mb-2">Masukkan Nomor Tiket</label>
+                            <label class="form-label fw-bold text-muted small text-uppercase ls-1 mb-2">Masukkan Nomor Tiket / Kode Registrasi</label>
                             <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border transition-all hover-border-primary">
                                 <span class="input-group-text bg-white border-0 ps-4 text-muted">
                                     <i class="bi bi-ticket-perforated-fill fs-5"></i>
                                 </span>
-                                <input type="text" name="ticket" class="form-control border-0 ps-2 fw-bold text-dark" placeholder="Contoh: REQ-2025-XXXX" required value="{{ request('ticket') }}" autofocus style="letter-spacing: 1px;">
+                                <input type="text" name="ticket" class="form-control border-0 ps-2 fw-bold text-dark" placeholder="Contoh: REQ-xxxx atau OBJ-xxxx" required value="{{ request('ticket') }}" autofocus style="letter-spacing: 1px;">
                                 <button class="btn btn-primary px-4 fw-bold" type="submit">
                                     <i class="bi bi-search me-2"></i> Lacak
                                 </button>

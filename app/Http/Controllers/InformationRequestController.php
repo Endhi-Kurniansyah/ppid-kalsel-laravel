@@ -140,10 +140,20 @@ class InformationRequestController extends Controller
         $result = null;
         if ($request->has('ticket')) {
             $ticket = $request->input('ticket');
+
+            // 1. Cek Tiket Permohonan (REQ-...)
             $result = InformationRequest::where('ticket_number', $ticket)->first();
 
+            // 2. Jika tidak ketemu, Cek Tiket Keberatan (OBJ-...)
             if (!$result) {
-                return back()->with('error', 'Nomor Tiket tidak ditemukan! Mohon periksa kembali.');
+                $objection = \App\Models\Objection::where('objection_code', $ticket)->first();
+                if ($objection) {
+                    $result = $objection->request; // Ambil Data Permohonan Induknya
+                }
+            }
+
+            if (!$result) {
+                return back()->with('error', 'Nomor Tiket (Permohonan/Keberatan) tidak ditemukan! Mohon periksa kembali.');
             }
         }
         return view('frontend.track', compact('result'));

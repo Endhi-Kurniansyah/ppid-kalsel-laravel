@@ -32,8 +32,8 @@
                         <option value="{{ $y }}" {{ date('Y') == $y ? 'selected' : '' }}>{{ $y }}</option>
                     @endforeach
                 </select>
-                <button type="submit" class="btn btn-dark btn-sm rounded-pill px-4 shadow-sm fw-bold d-flex align-items-center gap-2" style="height: 38px;">
-                    <i class="bi bi-printer-fill"></i> Cetak
+                <button type="submit" class="btn btn-danger btn-sm rounded-pill px-4 shadow-sm fw-bold d-flex align-items-center gap-2 hover-scale" style="height: 38px;">
+                    <i class="bi bi-printer-fill"></i> Cetak Laporan
                 </button>
             </form>
         </div>
@@ -204,15 +204,49 @@
                     <div class="flex-grow-1 position-relative z-2">
                         <small class="text-white-50 fw-bold ls-1 d-block mb-3" style="font-size: 0.75rem;">AKSES CEPAT</small>
                         <div class="d-grid gap-2">
-                            @if(Route::has('admin.posts.create'))
-                                <a href="{{ route('admin.posts.create') }}" class="btn btn-outline-light text-start border-0 bg-white bg-opacity-5 hover-bg-opacity-10 py-3 rounded-3">
-                                    <i class="bi bi-pencil-square me-3 text-warning"></i> Tulis Berita Baru
+                            @if(Route::has('posts.create'))
+                                <a href="{{ route('posts.create') }}" class="btn btn-light text-start border-0 py-3 px-3 rounded-3 shadow-sm d-flex align-items-center hover-scale transition-all mb-1">
+                                    <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 38px; height: 38px;">
+                                        <i class="bi bi-pencil-square fs-5"></i>
+                                    </div>
+                                    <div class="lh-1">
+                                        <div class="fw-bold text-dark">Tulis Berita</div>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Buat artikel baru</small>
+                                    </div>
                                 </a>
                             @endif
 
-                            @if(Route::has('admin.documents.create'))
-                                <a href="{{ route('admin.documents.create') }}" class="btn btn-outline-light text-start border-0 bg-white bg-opacity-5 hover-bg-opacity-10 py-3 rounded-3">
-                                    <i class="bi bi-cloud-upload me-3 text-success"></i> Upload Dokumen
+                            @if(Route::has('documents.create'))
+                                <a href="{{ route('documents.create') }}" class="btn btn-light text-start border-0 py-3 px-3 rounded-3 shadow-sm d-flex align-items-center hover-scale transition-all mb-1">
+                                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 38px; height: 38px;">
+                                        <i class="bi bi-cloud-upload fs-5"></i>
+                                    </div>
+                                    <div class="lh-1">
+                                        <div class="fw-bold text-dark">Upload Dokumen</div>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Simpan arsip publik</small>
+                                    </div>
+                                </a>
+                            @endif
+
+                            <a href="{{ route('admin.requests.index') }}" class="btn btn-light text-start border-0 py-3 px-3 rounded-3 shadow-sm d-flex align-items-center hover-scale transition-all mb-1">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 38px; height: 38px;">
+                                    <i class="bi bi-inbox-fill fs-5"></i>
+                                </div>
+                                <div class="lh-1">
+                                    <div class="fw-bold text-dark">Permohonan</div>
+                                    <small class="text-muted" style="font-size: 0.7rem;">Cek status permohonan</small>
+                                </div>
+                            </a>
+
+                            @if(auth()->user()->role == 'super_admin')
+                                <a href="{{ route('admin.users.index') }}" class="btn btn-light text-start border-0 py-3 px-3 rounded-3 shadow-sm d-flex align-items-center hover-scale transition-all">
+                                    <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 38px; height: 38px;">
+                                        <i class="bi bi-people-fill fs-5"></i>
+                                    </div>
+                                    <div class="lh-1">
+                                        <div class="fw-bold text-dark">User System</div>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Kelola pengguna</small>
+                                    </div>
                                 </a>
                             @endif
                         </div>

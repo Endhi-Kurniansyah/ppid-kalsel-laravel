@@ -76,7 +76,8 @@
                                 <option value="berkala" {{ $document->category == 'berkala' ? 'selected' : '' }}>Informasi Berkala</option>
                                 <option value="serta-merta" {{ $document->category == 'serta-merta' ? 'selected' : '' }}>Informasi Serta Merta</option>
                                 <option value="setiap-saat" {{ $document->category == 'setiap-saat' ? 'selected' : '' }}>Informasi Setiap Saat</option>
-                                <option value="sop" {{ $document->category == 'sop' ? 'selected' : '' }}>SOP Layanan</option>
+                                <option value="dikecualikan" {{ $document->category == 'dikecualikan' ? 'selected' : '' }}>Informasi Dikecualikan</option>
+                                <option value="sop-ppid" {{ $document->category == 'sop-ppid' ? 'selected' : '' }}>SOP Layanan</option>
                             </select>
                             @error('category') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>

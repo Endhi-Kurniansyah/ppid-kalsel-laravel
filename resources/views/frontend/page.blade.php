@@ -25,7 +25,17 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <h1 class="display-3 fw-bold text-white mb-3 animate-fade-up text-shadow">
-                    <span class="text-gradient-gold">{{ $page->title }}</span>
+                    @php
+                        $words = explode(' ', $page->title);
+                        $lastWord = array_pop($words);
+                        $firstPart = implode(' ', $words);
+                    @endphp
+
+                    @if($firstPart)
+                        {{ $firstPart }} <span class="text-gradient-gold">{{ $lastWord }}</span>
+                    @else
+                        <span class="text-gradient-gold">{{ $lastWord }}</span>
+                    @endif
                 </h1>
             </div>
         </div>

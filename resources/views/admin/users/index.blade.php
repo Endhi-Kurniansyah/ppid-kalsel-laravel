@@ -17,8 +17,9 @@
 
         <div class="mt-3 mt-md-0 d-flex gap-2 align-items-center">
             {{-- CETAK LAPORAN --}}
-            <a href="{{ route('admin.reports.users') }}" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold hover-scale" style="font-size: 0.75rem;">
-                <i class="bi bi-file-earmark-pdf me-1"></i> Cetak Daftar
+            {{-- CETAK LAPORAN --}}
+            <a href="{{ route('admin.reports.users') }}" target="_blank" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold shadow-sm hover-scale" style="font-size: 0.75rem;">
+                <i class="bi bi-printer-fill me-1"></i> Cetak Laporan
             </a>
 
             {{-- TAMBAH USER --}}

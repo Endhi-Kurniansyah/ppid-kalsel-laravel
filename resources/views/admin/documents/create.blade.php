@@ -75,7 +75,9 @@
                                 <option value="berkala" {{ old('category') == 'berkala' ? 'selected' : '' }}>Informasi Berkala</option>
                                 <option value="serta-merta" {{ old('category') == 'serta-merta' ? 'selected' : '' }}>Informasi Serta Merta</option>
                                 <option value="setiap-saat" {{ old('category') == 'setiap-saat' ? 'selected' : '' }}>Informasi Setiap Saat</option>
-                                <option value="sop" {{ old('category') == 'sop' ? 'selected' : '' }}>SOP Layanan</option>
+                                <option value="dikecualikan" {{ old('category') == 'dikecualikan' ? 'selected' : '' }}>Informasi Dikecualikan</option>
+                                <option value="sop-ppid" {{ old('category') == 'sop-ppid' ? 'selected' : '' }}>SOP Layanan</option>
+                                <option value="lainnya" {{ old('category') == 'lainnya' ? 'selected' : '' }}>Lainnya / Umum</option>
                             </select>
                             @error('category') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>

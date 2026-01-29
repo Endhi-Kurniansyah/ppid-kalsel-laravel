@@ -53,10 +53,11 @@ class MenuSeeder extends Seeder
             'parent_id' => null
         ]);
             // Anak Layanan (Maklumat sudah dihapus dari sini)
-            Menu::create(['name' => 'Cara Memperoleh Informasi', 'url' => '/page/cara-memperoleh-informasi', 'order' => 1, 'parent_id' => $layanan->id]);
-            Menu::create(['name' => 'Form Permohonan Informasi', 'url' => '/ajukan-permohonan', 'order' => 2, 'parent_id' => $layanan->id]);
-            Menu::create(['name' => 'Cek Status Permohonan', 'url' => '/cek-status', 'order' => 3, 'parent_id' => $layanan->id]);
-            Menu::create(['name' => 'Ajukan Keberatan', 'url' => '/ajukan-keberatan', 'order' => 4, 'parent_id' => $layanan->id]);
+            Menu::create(['name' => 'SOP PPID', 'url' => '/dokumen/sop-ppid', 'order' => 1, 'parent_id' => $layanan->id]);
+            Menu::create(['name' => 'Cara Memperoleh Informasi', 'url' => '/page/cara-memperoleh-informasi', 'order' => 2, 'parent_id' => $layanan->id]);
+            Menu::create(['name' => 'Form Permohonan Informasi', 'url' => '/ajukan-permohonan', 'order' => 3, 'parent_id' => $layanan->id]);
+            Menu::create(['name' => 'Cek Status', 'url' => '/cek-status', 'order' => 4, 'parent_id' => $layanan->id]);
+            Menu::create(['name' => 'Ajukan Keberatan', 'url' => '/ajukan-keberatan', 'order' => 5, 'parent_id' => $layanan->id]);
 
         // 5. MENU: BERITA
         Menu::create([
@@ -66,11 +67,19 @@ class MenuSeeder extends Seeder
             'parent_id' => null
         ]);
 
-        // 6. MENU: KONTAK
+        // 6. MENU: GALERI
+        Menu::create([
+            'name' => 'Galeri',
+            'url' => '/galeri',
+            'order' => 6,
+            'parent_id' => null
+        ]);
+
+        // 7. MENU: KONTAK
         Menu::create([
             'name' => 'Kontak',
             'url' => '/page/kontak',
-            'order' => 6,
+            'order' => 7,
             'parent_id' => null
         ]);
     }

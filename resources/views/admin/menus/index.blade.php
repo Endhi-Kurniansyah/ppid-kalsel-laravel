@@ -92,7 +92,7 @@
                         {{-- INDUK (PARENT) --}}
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted text-uppercase ls-1">Posisi Induk</label>
-                            <select name="parent_id" class="form-select border-0 bg-light shadow-none py-2 px-3">
+                            <select name="parent_id" class="form-select border-0 bg-light shadow-none py-2 px-3 custom-select-down">
                                 <option value="" class="fw-bold">◈ Menu Utama (Root)</option>
                                 @foreach($parentMenus as $parent)
                                     <option value="{{ $parent->id }}" class="text-primary fw-bold">📂 {{ $parent->name }}</option>
@@ -106,7 +106,7 @@
                                 @endforeach
                             </select>
                         </div>
-
+                        
                         {{-- URUTAN --}}
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-muted text-uppercase ls-1">Nomor Urut</label>
@@ -255,5 +255,14 @@
     }
     .btn-primary { background-color: #0d6efd; border: none; }
     .btn-primary:hover { background-color: #0b5ed7; }
+    
+    /* Paksa Dropdown terbuka ke bawah (Styling) */
+    .custom-select-down {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+    }
 </style>
 @endsection

@@ -124,28 +124,17 @@
 {{-- SCRIPT EDITOR (Pertahankan Fungsi Upload Mas) --}}
 <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
 <script>
-    class MyUploadAdapter {
-        constructor(loader) { this.loader = loader; }
-        upload() {
-            return this.loader.file.then(file => new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve({ default: reader.result });
-                reader.onerror = error => reject(error);
-            }));
-        }
-        abort() {}
-    }
-
-    function MyCustomUploadAdapterPlugin(editor) {
-        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-            return new MyUploadAdapter(loader);
-        };
-    }
-
     ClassicEditor
         .create(document.querySelector('#editor'), {
-            extraPlugins: [ MyCustomUploadAdapterPlugin ],
+            simpleUpload: {
+                // The URL that the images are uploaded to.
+                uploadUrl: '{{ route('pages.upload.image') }}',
+
+                // Headers sent along with the XMLHttpRequest to the upload server.
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : '{{ csrf_token() }}'
+                }
+            },
             toolbar: [
                 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
                 'insertTable', 'mediaEmbed', '|', 'undo', 'redo', '|', 'imageUpload'

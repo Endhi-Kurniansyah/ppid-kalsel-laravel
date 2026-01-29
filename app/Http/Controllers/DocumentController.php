@@ -111,23 +111,37 @@ class DocumentController extends Controller
      */
     public function indexPublic(Request $request, $category = null)
     {
+        // Redirect /dokumen ke /dokumen/dip jika tidak ada category
+        if (!$category && !$request->has('q')) {
+            return redirect()->route('documents.dip');
+        }
+
         $query = Document::query();
 
         $category_title = 'Dokumen Publik';
         $category_desc  = 'Daftar Informasi Publik PPID Provinsi Kalimantan Selatan';
 
         // 1. LOGIKA KATEGORI
+        // 1. LOGIKA KATEGORI
         if ($category) {
-            $query->where('category', 'LIKE', '%' . $category . '%');
-
-            // Judul Header
-            switch ($category) {
-                case 'sop': $category_title = 'SOP'; break;
-                case 'berkala': $category_title = 'Informasi Berkala'; break;
-                case 'serta-merta': $category_title = 'Informasi Serta Merta'; break;
-                case 'setiap-saat': $category_title = 'Informasi Setiap Saat'; break;
-                case 'dikecualikan': $category_title = 'Informasi Dikecualikan'; break;
-                default: $category_title = 'Kategori: ' . ucwords(str_replace('-', ' ', $category)); break;
+            // FIX: Menangani ketidakkonsistenan antara 'sop' dan 'sop-ppid'
+            if ($category == 'sop-ppid' || $category == 'sop') {
+                $query->where(function ($q) {
+                    $q->where('category', 'sop')
+                      ->orWhere('category', 'sop-ppid');
+                });
+                $category_title = 'SOP PPID';
+            } else {
+                $query->where('category', 'LIKE', '%' . $category . '%');
+                
+                // Judul Header
+                switch ($category) {
+                    case 'berkala': $category_title = 'Informasi Berkala'; break;
+                    case 'serta-merta': $category_title = 'Informasi Serta Merta'; break;
+                    case 'setiap-saat': $category_title = 'Informasi Setiap Saat'; break;
+                    case 'dikecualikan': $category_title = 'Informasi Dikecualikan'; break;
+                    default: $category_title = ucwords(str_replace('-', ' ', $category)); break;
+                }
             }
         }
 
@@ -155,9 +169,8 @@ class DocumentController extends Controller
      */
     public function dipIndex(Request $request)
     {
-        // 1. Ambil SEMUA Dokumen (Urutkan dari yang terbaru)
-        // Kita gunakan get() bukan paginate() agar bisa dikelompokkan per kategori dalam satu halaman
-        $documents = Document::latest()->get();
+        // 1. Ambil SEMUA Dokumen (Urutkan dari yang terbaru), KECUALI kategori 'lainnya'
+        $documents = Document::where('category', '!=', 'lainnya')->latest()->get();
 
         // 2. Kelompokkan Dokumen berdasarkan kolom 'category'
         // Hasilnya akan menjadi array: ['Berkala' => [doc1, doc2], 'Serta Merta' => [doc3], ...]

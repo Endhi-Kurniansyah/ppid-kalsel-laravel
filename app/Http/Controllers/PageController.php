@@ -64,8 +64,8 @@ class PageController extends Controller
         $page->update([
             'title'   => $request->title,
 
-            // Pastikan pakai Str::slug (Huruf besar S)
-            'slug'    => \Illuminate\Support\Str::slug($request->title),
+            // FIX: Jangan update slug agar link di menu tidak putus
+            // 'slug'    => \Illuminate\Support\Str::slug($request->title),
 
             // --- INI PERBAIKANNYA ---
             // Jangan pakai $request->content, tapi pakai input()

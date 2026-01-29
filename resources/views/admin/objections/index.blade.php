@@ -34,16 +34,16 @@
                     @endforeach
                 </select>
 
-                <button type="submit" class="btn btn-dark btn-sm rounded-circle shadow-sm d-flex align-items-center justify-content-center hover-scale" style="width: 32px; height: 32px; border: none; background-color: #0f172a;">
-                    <i class="bi bi-funnel-fill" style="font-size: 0.8rem;"></i>
+                <button type="submit" class="btn btn-white btn-sm rounded-pill px-3 fw-bold shadow-sm d-flex align-items-center gap-2 border hover-scale" style="font-size: 0.75rem;">
+                    <i class="bi bi-funnel"></i> Filter
                 </button>
             </form>
 
             <div class="vr mx-1 opacity-10 d-none d-md-block"></div>
 
             {{-- CETAK LAPORAN --}}
-            <a href="{{ route('admin.reports.objections', request()->all()) }}" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold d-flex align-items-center gap-2 hover-scale" style="font-size: 0.75rem;">
-                <i class="bi bi-file-earmark-pdf"></i> Cetak Laporan
+            <a href="{{ route('admin.reports.objections', request()->all()) }}" target="_blank" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold d-flex align-items-center gap-2 hover-scale shadow-sm" style="font-size: 0.75rem;">
+                <i class="bi bi-printer-fill"></i> Cetak Laporan
             </a>
         </div>
     </div>

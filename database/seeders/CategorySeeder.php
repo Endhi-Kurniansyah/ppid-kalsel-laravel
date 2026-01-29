@@ -15,10 +15,12 @@ class CategorySeeder extends Seeder
             ['name' => 'Informasi Serta Merta', 'slug' => 'serta-merta', 'type' => 'document'],
             ['name' => 'Informasi Setiap Saat', 'slug' => 'setiap-saat', 'type' => 'document'],
             ['name' => 'Informasi Dikecualikan', 'slug' => 'dikecualikan', 'type' => 'document'],
-            ['name' => 'SOP Layanan', 'slug' => 'sop', 'type' => 'document'],
+            ['name' => 'SOP PPID', 'slug' => 'sop-ppid', 'type' => 'document'],
             ['name' => 'Berita Kegiatan', 'slug' => 'berita-kegiatan', 'type' => 'news'],
             ['name' => 'Artikel', 'slug' => 'artikel', 'type' => 'news'],
+            ['name' => 'Artikel', 'slug' => 'artikel', 'type' => 'news'],
             ['name' => 'Pengumuman', 'slug' => 'pengumuman', 'type' => 'news'],
+            ['name' => 'Lainnya', 'slug' => 'lainnya', 'type' => 'document'], // Kategori untuk dokumen umum/pendukung
         ];
 
         // Loop Simpan
