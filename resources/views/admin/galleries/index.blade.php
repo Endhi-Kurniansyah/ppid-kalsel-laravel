@@ -68,7 +68,7 @@
                             <i class="bi bi-pencil-fill" style="font-size: 0.8rem;"></i>
                         </button>
                         
-                        <form action="{{ route('galleries.destroy', $gallery->id) }}" method="POST" onsubmit="return confirm('Hapus foto ini permanently?')">
+                        <form action="{{ route('galleries.destroy', $gallery->id) }}" method="POST" onsubmit="return confirmDelete(event)">
                             @csrf @method('DELETE')
                             <button class="btn btn-sm btn-light rounded-circle text-danger hover-scale border-0" style="width: 32px; height: 32px;">
                                 <i class="bi bi-trash3-fill" style="font-size: 0.8rem;"></i>

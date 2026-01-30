@@ -18,12 +18,12 @@
         {{-- Badge Sukses --}}
         <div class="d-inline-flex align-items-center bg-white bg-opacity-10 backdrop-blur border border-white border-opacity-25 rounded-pill px-3 py-1 mb-4 animate-fade-down">
             <span class="badge bg-success text-white me-2 rounded-pill"><i class="bi bi-check-circle-fill"></i></span>
-            <small class="fw-medium ls-1 text-white">TERKIRIM</small>
+            <small class="fw-medium ls-1 text-white">PERMOHONAN BERHASIL</small>
         </div>
 
         {{-- Judul Emas --}}
         <h1 class="display-3 fw-bold mb-3 animate-fade-up text-white">
-            Permohonan <span class="text-gradient-gold">Berhasil</span>
+            Terima <span class="text-gradient-gold">Kasih</span>
         </h1>
 
         {{-- Deskripsi --}}
@@ -56,7 +56,7 @@
                             </div>
                         </div>
 
-                        <h3 class="fw-bold text-dark mb-2">Terima Kasih!</h3>
+                        <h3 class="fw-bold text-dark mb-2">Permohonan Diterima!</h3>
                         <p class="text-muted mb-4">
                             Permohonan Anda sedang kami proses. Mohon simpan <strong>Nomor Tiket</strong> di bawah ini untuk mengecek status pengajuan secara berkala.
                         </p>
@@ -67,7 +67,7 @@
                                 NOMOR TIKET ANDA
                             </span>
 
-                            <h2 class="fw-bold text-primary mb-0 mt-3 tracking-wide font-monospace" id="ticketCode">
+                            <h2 class="fw-bold text-primary mb-0 mt-3 tracking-wide" id="ticketCode">
                                 {{ $ticket }}
                             </h2>
                         </div>

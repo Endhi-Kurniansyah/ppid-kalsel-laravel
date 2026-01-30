@@ -142,7 +142,7 @@
                                 </a>
 
                                 {{-- HAPUS --}}
-                                <form action="{{ route('documents.destroy', $doc->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus dokumen ini?')">
+                                <form action="{{ route('documents.destroy', $doc->id) }}" method="POST" class="d-inline" onsubmit="return confirmDelete(event)">
                                     @csrf @method('DELETE')
                                     <button class="btn btn-sm btn-outline-danger rounded-circle d-flex align-items-center justify-content-center hover-scale" style="width: 32px; height: 32px;" title="Hapus">
                                         <i class="bi bi-trash3"></i>

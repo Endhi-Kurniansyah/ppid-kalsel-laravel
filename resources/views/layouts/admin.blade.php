@@ -356,6 +356,30 @@
         </div>
     </div>
     
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(event) {
+            event.preventDefault(); // Mencegah submit form langsung
+            const form = event.target; // Ambil elemen form yang mentrigger
+
+            Swal.fire({
+                title: 'Apakah, Anda Yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Submit form jika user konfirmasi
+                }
+            });
+            return false; // Return false untuk onsubmit
+        }
+    </script>
     <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
     <script>
         /* Sidebar Toggle Script */

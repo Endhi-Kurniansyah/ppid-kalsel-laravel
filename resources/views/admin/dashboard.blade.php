@@ -110,12 +110,12 @@
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0 text-nowrap w-100">
-                            <thead class="bg-light text-secondary">
-                                <tr>
-                                    <th class="ps-4 py-3 small fw-bold border-0 bg-light text-muted text-uppercase">Tiket</th>
-                                    <th class="py-3 small fw-bold border-0 bg-light text-muted text-uppercase">Pemohon</th>
-                                    <th class="py-3 small fw-bold border-0 text-center bg-light text-muted text-uppercase">Status</th>
-                                    <th class="py-3 small fw-bold border-0 text-end pe-4 bg-light text-muted text-uppercase">Aksi</th>
+                            <thead class="table-light">
+                                <tr class="text-muted small text-uppercase fw-bold">
+                                    <th class="ps-4 py-3 border-0">Tiket</th>
+                                    <th class="py-3 border-0">Pemohon</th>
+                                    <th class="py-3 border-0">Status</th>
+                                    <th class="py-3 border-0 text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -130,26 +130,21 @@
                                             <small class="text-muted" style="font-size: 0.75rem;">{{ $req->created_at->diffForHumans() }}</small>
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td>
                                         @php
-                                            $statusClass = match($req->status) {
-                                                'pending' => 'bg-warning text-dark',
-                                                'processed' => 'bg-info text-white',
-                                                'finished' => 'bg-success text-white',
-                                                'rejected' => 'bg-danger text-white',
-                                                default => 'bg-secondary text-white',
-                                            };
-                                            $statusLabel = match($req->status) {
-                                                'pending' => 'Menunggu',
-                                                'processed' => 'Diproses',
-                                                'finished' => 'Selesai',
-                                                'rejected' => 'Ditolak',
-                                                default => '-',
-                                            };
+                                            $statusConfig = [
+                                                'pending'   => ['label' => 'Menunggu', 'class' => 'bg-warning bg-opacity-10 text-dark border-warning'],
+                                                'processed' => ['label' => 'Diproses', 'class' => 'bg-info bg-opacity-10 text-info border-info'],
+                                                'finished'  => ['label' => 'Selesai', 'class' => 'bg-success bg-opacity-10 text-success border-success'],
+                                                'rejected'  => ['label' => 'Ditolak', 'class' => 'bg-danger bg-opacity-10 text-danger border-danger']
+                                            ];
+                                            $currentStatus = $statusConfig[$req->status] ?? ['label' => '-', 'class' => 'bg-secondary bg-opacity-10 text-secondary border-secondary'];
                                         @endphp
-                                        <span class="badge {{ $statusClass }} rounded-pill px-3 py-2 fw-normal">{{ $statusLabel }}</span>
+                                        <span class="badge {{ $currentStatus['class'] }} border rounded-pill px-3 py-1 fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                                            {{ strtoupper($currentStatus['label']) }}
+                                        </span>
                                     </td>
-                                    <td class="text-end pe-4">
+                                    <td class="text-center">
                                         <a href="{{ route('admin.requests.show', $req->id) }}" class="btn btn-sm btn-light border rounded-circle shadow-sm p-0 d-inline-flex align-items-center justify-content-center hover-scale" style="width: 35px; height: 35px;">
                                             <i class="bi bi-chevron-right text-secondary"></i>
                                         </a>

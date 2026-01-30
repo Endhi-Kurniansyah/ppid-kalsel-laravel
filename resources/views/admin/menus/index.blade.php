@@ -194,7 +194,7 @@
                                                 <a href="{{ route('menus.edit', $menu->id) }}" class="btn btn-sm btn-outline-warning rounded-circle d-flex align-items-center justify-content-center hover-scale" style="width: 32px; height: 32px;" title="Ubah Data">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
-                                                <form action="{{ route('menus.destroy', $menu->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus menu ini beserta cabangnya?')">
+                                                <form action="{{ route('menus.destroy', $menu->id) }}" method="POST" class="d-inline" onsubmit="return confirmDelete(event)">
                                                     @csrf @method('DELETE')
                                                     <button class="btn btn-sm btn-outline-danger rounded-circle d-flex align-items-center justify-content-center hover-scale" style="width: 32px; height: 32px;" title="Hapus Permanen">
                                                         <i class="bi bi-trash3"></i>
